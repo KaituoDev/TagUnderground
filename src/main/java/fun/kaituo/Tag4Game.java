@@ -70,10 +70,10 @@ public class Tag4Game extends Game implements Listener {
 
     private Tag4Game(Tag4 plugin) {
         this.plugin = plugin;
-        initializeGame(plugin, "Tag4", "§f待定", new Location(world,-1000, 171, 2000),
-                new BoundingBox(-1966, 169, 2064,-1063, 63, 1935));
-        initializeButtons(new Location(world,-999, 172, 2009),BlockFace.NORTH,
-                new Location(world, -1000, 172, 2009),BlockFace.NORTH);
+        initializeGame(plugin, "Tag4", "§f待定", new Location(world,-1003.0, 81, 2021.0),
+                new BoundingBox(-1200, 60, 1800,-800, 220, 2200));
+        initializeButtons(new Location(world,-1003, 82, 2027),BlockFace.NORTH,
+                new Location(world, -1004, 82, 2027),BlockFace.NORTH);
         players = Tag4.players;
         tag4.registerNewObjective("tag4", "dummy", "鬼抓人");
         tag4.getObjective("tag4").setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -256,66 +256,78 @@ public class Tag4Game extends Game implements Listener {
         if (!pie.getAction().equals(Action.RIGHT_CLICK_AIR) && !pie.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {return;}// 不是右键
         Player executor = pie.getPlayer();
         if (!players.contains(executor)) {return;}//不在tag4里
-        if (devils.contains(executor)) { return; } //不是人
-        if (pie.getClickedBlock() != null) {
-            if (pie.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) {
-                if (!pie.getPlayer().isSneaking()) {
-                    executor.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,60,0));
-                    return;
+        if (devils.contains(executor)) { //是鬼
+            if (pie.getItem() == null) {return;}//没有物品
+            //这里开始添加内容
+
+            switch (pie.getItem().getType()) {
+                case EMERALD -> {
+                    for (Player p: humans) {
+                        p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 100, 0));
+                    }
                 }
             }
-        }
-        if (pie.getItem() == null) {return;}//没有物品
-        //这里开始添加内容
+        } else {
+            if (pie.getClickedBlock() != null) {
+                if (pie.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) {
+                    if (!pie.getPlayer().isSneaking()) {
+                        executor.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,60,0));
+                        return;
+                    }
+                }
+            }
+            if (pie.getItem() == null) {return;}//没有物品
+            //这里开始添加内容
 
-        switch (pie.getItem().getType()) {
-            case COAL :
-                pie.getItem().setAmount(pie.getItem().getAmount() - 1);
-                executor.sendMessage("§c最大生命值减少，生命全部恢复！");
-                executor.setMaxHealth(executor.getMaxHealth() - 3);
-                executor.setHealth(executor.getMaxHealth());
-                break;
-            case POTION:
-                pie.getItem().setAmount(pie.getItem().getAmount() - 1);
-                executor.sendMessage("§c30秒内无敌，30秒后将被强制击倒！");
-                executor.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,600,254,false,false));
-                Bukkit.getScheduler().runTaskLater(plugin,() -> {
-                    executor.setHealth(0);
-                }, 600);
-                break;
-            case GLASS_BOTTLE:
-                pie.getItem().setAmount(pie.getItem().getAmount() - 1);
-                executor.sendMessage("§c隐身10秒！");
-                executor.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,200,0,false,false));
-                break;
-            case DRAGON_BREATH:
-                pie.getItem().setAmount(pie.getItem().getAmount() - 1);
-                executor.sendMessage("§c回复一半最大生命值，获得与回复量相同的发光时长！");
-                if (executor.getHealth() * 2 < executor.getMaxHealth()) {
-                    executor.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,(int)(executor.getMaxHealth() * 10),0,false,false));
-                    executor.setHealth(executor.getHealth() + executor.getMaxHealth() / 2);
-                } else {
-                    executor.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,(int)((executor.getMaxHealth() - executor.getHealth()) * 20),0,false,false));
+            switch (pie.getItem().getType()) {
+                case COAL -> {
+                    pie.getItem().setAmount(pie.getItem().getAmount() - 1);
+                    executor.sendMessage("§c最大生命值减少，生命全部恢复！");
+                    executor.setMaxHealth(executor.getMaxHealth() - 3);
                     executor.setHealth(executor.getMaxHealth());
                 }
-                break;
-            case HONEY_BOTTLE:
-                pie.getItem().setAmount(pie.getItem().getAmount() - 1);
-                executor.sendMessage("§e减少一半的当前生命值，获得与减少量两倍相同的加速时间！");
-                executor.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,(int)(executor.getHealth() * 20),0,false,false));
-                executor.setHealth(executor.getHealth() / 2);
-                break;
-            case FEATHER:
-                pie.getItem().setAmount(pie.getItem().getAmount() - 1);
-                executor.getInventory().addItem(cooked_chicken);
-                executor.sendMessage("§b获得加速！");
-                executor.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,200,0,false,false));
-                break;
-            case COOKED_CHICKEN:
-                pie.getItem().setAmount(pie.getItem().getAmount() - 1);
-                executor.sendMessage("§b获得加速！");
-                executor.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,100,1,false,false));
-                break;
+                case POTION -> {
+                    pie.getItem().setAmount(pie.getItem().getAmount() - 1);
+                    executor.sendMessage("§c30秒内无敌，30秒后将被强制击倒！");
+                    executor.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 600, 254, false, false));
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        executor.setHealth(0);
+                    }, 600);
+                }
+                case GLASS_BOTTLE -> {
+                    pie.getItem().setAmount(pie.getItem().getAmount() - 1);
+                    executor.sendMessage("§c隐身10秒！");
+                    executor.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 200, 0, false, false));
+                }
+                case DRAGON_BREATH -> {
+                    pie.getItem().setAmount(pie.getItem().getAmount() - 1);
+                    executor.sendMessage("§c回复一半最大生命值，获得与回复量相同的发光时长！");
+                    if (executor.getHealth() * 2 < executor.getMaxHealth()) {
+                        executor.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, (int) (executor.getMaxHealth() * 10), 0, false, false));
+                        executor.setHealth(executor.getHealth() + executor.getMaxHealth() / 2);
+                    } else {
+                        executor.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, (int) ((executor.getMaxHealth() - executor.getHealth()) * 20), 0, false, false));
+                        executor.setHealth(executor.getMaxHealth());
+                    }
+                }
+                case HONEY_BOTTLE -> {
+                    pie.getItem().setAmount(pie.getItem().getAmount() - 1);
+                    executor.sendMessage("§e减少一半的当前生命值，获得与减少量两倍相同的加速时间！");
+                    executor.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (int) (executor.getHealth() * 20), 0, false, false));
+                    executor.setHealth(executor.getHealth() / 2);
+                }
+                case FEATHER -> {
+                    pie.getItem().setAmount(pie.getItem().getAmount() - 1);
+                    executor.getInventory().addItem(cooked_chicken);
+                    executor.sendMessage("§b获得加速！");
+                    executor.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 0, false, false));
+                }
+                case COOKED_CHICKEN -> {
+                    pie.getItem().setAmount(pie.getItem().getAmount() - 1);
+                    executor.sendMessage("§b获得加速！");
+                    executor.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 1, false, false));
+                }
+            }
         }
     }
     @EventHandler
@@ -631,19 +643,6 @@ public class Tag4Game extends Game implements Listener {
         cancelGameTasks();
     }
 
-    public static void spawnFirework(Location location) {
-        Location loc = location;
-        loc.setY(loc.getY() + 0.9);
-        Firework fw = (Firework) loc.getWorld().spawnEntity(loc, EntityType.FIREWORK);
-        FireworkMeta fwm = fw.getFireworkMeta();
-
-        fwm.setPower(2);
-        fwm.addEffect(FireworkEffect.builder().withColor(Color.LIME).flicker(true).build());
-
-        fw.setFireworkMeta(fwm);
-        fw.detonate();
-    }
-
     @Override
     protected void initializeGameRunnable() {
         gameRunnable = () -> {
@@ -653,11 +652,7 @@ public class Tag4Game extends Game implements Listener {
             team.setCanSeeFriendlyInvisibles(false);
             team.setAllowFriendlyFire(true);
             for (Player p : getPlayersNearHub(50,50,50)) {
-                if (scoreboard.getTeam("tag4R").hasPlayer(p)) {
-                    devils.add(p);
-                    players.add(p);
-                    team.addPlayer(p);
-                } else if (scoreboard.getTeam("tag4B").hasPlayer(p)) {
+                if (scoreboard.getTeam("tag4B").hasPlayer(p)) {
                     humans.add(p);
                     players.add(p);
                     team.addPlayer(p);
@@ -679,6 +674,18 @@ public class Tag4Game extends Game implements Listener {
                     team.addPlayer(p);
                 } else if (scoreboard.getTeam("tag4H").hasPlayer(p)) {
                     humans.add(p);
+                    players.add(p);
+                    team.addPlayer(p);
+                } else if (scoreboard.getTeam("tag4R").hasPlayer(p)) {
+                    devils.add(p);
+                    players.add(p);
+                    team.addPlayer(p);
+                } else if (scoreboard.getTeam("tag4E").hasPlayer(p)) {
+                    devils.add(p);
+                    players.add(p);
+                    team.addPlayer(p);
+                } else if (scoreboard.getTeam("tag4L").hasPlayer(p)) {
+                    devils.add(p);
                     players.add(p);
                     team.addPlayer(p);
                 }
@@ -802,7 +809,16 @@ public class Tag4Game extends Game implements Listener {
                     }
 
                 }, countDownSeconds * 20 + 400);
-
+                taskIds.add(
+                        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+                            for (Player p :players) {
+                                if (scoreboard.getTeam("tag4E").hasPlayer(p)) {
+                                    p.getInventory().addItem(new ItemStack(Material.ENDER_PEARL));
+                                } else if (scoreboard.getTeam("tag4L").hasPlayer(p)) {
+                                    p.getInventory().addItem(new ItemStack(Material.EMERALD));
+                                }
+                            }
+                }, countDownSeconds * 20 + 400, 40));
                 taskIds.add(
                         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin,() -> {
                             for (Player p: humans) {

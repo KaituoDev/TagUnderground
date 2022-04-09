@@ -26,7 +26,7 @@ public class Tag4 extends JavaPlugin implements Listener {
     static long gameTime;
     Scoreboard scoreboard;
     List<String> teamNames = new ArrayList<>(List.of(new String[]{"tag4Y", "tag4W","tag4X","tag4H",
-            "tag4R","tag4G","tag4B",}));
+            "tag4R","tag4G","tag4B","tag4E","tag4L",}));
     List<Team> teams = new ArrayList<>();
 
     public static Tag4Game getGameInstance() {
@@ -41,7 +41,7 @@ public class Tag4 extends JavaPlugin implements Listener {
         if (!pie.getClickedBlock().getType().equals(Material.OAK_BUTTON)) {
             return;
         }
-        if (pie.getClickedBlock().getLocation().equals(new Location(world,-999,172,2009))) {
+        if (pie.getClickedBlock().getLocation().equals(new Location(world,-1003,82,2027))) {
             Tag4Game.getInstance().startGame();
         }
     }
@@ -53,7 +53,7 @@ public class Tag4 extends JavaPlugin implements Listener {
         }
         Location location = pie.getClickedBlock().getLocation();
         long x = location.getBlockX(); long y = location.getBlockY(); long z = location.getBlockZ();
-        if (x == -999 && y == 173 && z == 2009) {
+        if (x == -1003 && y == 83 && z == 2027) {
             switch ((int)gameTime) {
                 case 8400:
                 case 10800:
@@ -74,55 +74,69 @@ public class Tag4 extends JavaPlugin implements Listener {
         if (Tag4Game.getInstance().running) {
             return;
         }
-        if (x == -993 && y == 171 && z == 1999) {
+        if (x == -1005 && y == 82 && z == 2027) {
             if (scoreboard.getTeam("tag4Y").hasPlayer(player)) {
                 return;
             }
             sendMessageToTag4Players(player, "诺登", "§f");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4Y " + player.getName());
             player.sendMessage("§f诺登§f： 欢迎回来，" + player.getName() + "大人");
-        } else if (x == -993 && y == 171 && z == 1998) {
+        } else if (x == -1006 && y == 82 && z == 2027) {
             if (scoreboard.getTeam("tag4W").hasPlayer(player)) {
                 return;
             }
             sendMessageToTag4Players(player, "柴郡猫", "§d");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4W " + player.getName());
             player.sendMessage("§d柴郡猫§f： 能和你再说上话真是太好喵");
-        } else if (x == -993 && y == 171 && z == 1996) {
+        } else if (x == -1007 && y == 82 && z == 2027) {
             if (scoreboard.getTeam("tag4X").hasPlayer(player)) {
                 return;
             }
             sendMessageToTag4Players(player, "小红帽", "§c");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4X " + player.getName());
             player.sendMessage("§c小红帽§f： .......好了,我们出发吧");
-        } else if (x == -993 && y == 171 && z == 1995) {
+        } else if (x == -1008 && y == 82 && z == 2027) {
             if (scoreboard.getTeam("tag4H").hasPlayer(player)) {
                 return;
             }
             sendMessageToTag4Players(player, "爱丽丝", "§b");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4H " + player.getName());
             player.sendMessage("§b爱丽丝§f： 去寻觅爱的浪漫吧~☆");
-        } else if (x == -993 && y == 171 && z == 1994) {
-            if (scoreboard.getTeam("tag4R").hasPlayer(player)) {
-                return;
-            }
-            sendMessageToTag4Players(player, "琳达梅尔", "§8");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4R " + player.getName());
-            player.sendMessage("§8琳达梅尔§f： 我要重建新的黒之裁判，将盘踞于大地之上的罪人处刑！");
-        } else if (x == -993 && y == 171 && z == 2000) {
+        } else if (x == -1009 && y == 82 && z == 2027) {
             if (scoreboard.getTeam("tag4G").hasPlayer(player)) {
                 return;
             }
             sendMessageToTag4Players(player, "梅贝尔", "§7");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4G " + player.getName());
             player.sendMessage("§7梅贝尔§f： 真的可以么？不要后悔哟~");
-        } else if (x == -993 && y == 171 && z == 1997) {
+        } else if (x == -1010 && y == 82 && z == 2027) {
             if (scoreboard.getTeam("tag4B").hasPlayer(player)) {
                 return;
             }
             sendMessageToTag4Players(player, "克缇", "§9");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4B " + player.getName());
             player.sendMessage("§9克缇§f： 嗯，嗯，克缇，记住了哦。请多指教，"+ player.getName() + "酱");
+        } else if (x == -1002 && y == 82 && z == 2027) {
+            if (scoreboard.getTeam("tag4R").hasPlayer(player)) {
+                return;
+            }
+            sendMessageToTag4Players(player, "琳达梅尔", "§8");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4R " + player.getName());
+            player.sendMessage("§8琳达梅尔§f： 我要重建新的黒之裁判，将盘踞于大地之上的罪人处刑！");
+        } else if (x == -1001 && y == 82 && z == 2027) {
+            if (scoreboard.getTeam("tag4E").hasPlayer(player)) {
+                return;
+            }
+            sendMessageToTag4Players(player, "琳达梅尔2", "§8");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4E " + player.getName());
+            player.sendMessage("§8琳达梅尔§f： 我要重建新的黒之裁判，将盘踞于大地之上的罪人处刑！");
+        } else if (x == -1000 && y == 82 && z == 2027) {
+            if (scoreboard.getTeam("tag4L").hasPlayer(player)) {
+                return;
+            }
+            sendMessageToTag4Players(player, "琳达梅尔3", "§8");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4L " + player.getName());
+            player.sendMessage("§8琳达梅尔§f： 我要重建新的黒之裁判，将盘踞于大地之上的罪人处刑！");
         }
     }
     public void onEnable() {
@@ -133,7 +147,7 @@ public class Tag4 extends JavaPlugin implements Listener {
         }
         Bukkit.getPluginManager().registerEvents(this, this);
         gameTime = 8400;
-        Sign sign = (Sign) world.getBlockAt(-999, 173, 2009).getState();
+        Sign sign = (Sign) world.getBlockAt(-1003, 83, 2027).getState();
         sign.setLine(2,"当前时间为 " + gameTime/1200 + " 分钟");
         sign.update();
         GameUtils.registerGame(getGameInstance());
