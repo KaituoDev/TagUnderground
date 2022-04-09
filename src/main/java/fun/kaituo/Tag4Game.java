@@ -616,7 +616,7 @@ public class Tag4Game extends Game implements Listener {
 
     private void endGame() {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            for (Entity e : world.getNearbyEntities(new Location(world, -1000, 128, 1000), 200, 200, 200)) {
+            for (Entity e : world.getNearbyEntities(new Location(world, -1000, 128, 2000), 200, 200, 200)) {
                 if (e instanceof Item) {
                     e.remove();
                 }
@@ -738,6 +738,8 @@ public class Tag4Game extends Game implements Listener {
                             p.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING,10000000,0,false,false));
                         } else if (scoreboard.getTeam("tag4G").hasPlayer(p)) {
                             p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,10000000,0,false,false));
+                        } else if (scoreboard.getTeam("tag4R").hasPlayer(p)) {
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,10000000,1,false,false));
                         }
                         p.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 999999, 0, false, false));
                     }
@@ -904,7 +906,7 @@ public class Tag4Game extends Game implements Listener {
                             p.resetPlayerWeather();
                             p.resetPlayerTime();
                             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                                p.teleport(new Location(world, -1000, 171, 2000));
+                                p.teleport(new Location(world, -1003.0, 81, 2021.0));
                                 Bukkit.getPluginManager().callEvent(new PlayerEndGameEvent(p,this));
                             }, 100);
                             Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -925,7 +927,7 @@ public class Tag4Game extends Game implements Listener {
                             p.resetPlayerWeather();
                             p.resetPlayerTime();
                             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                                p.teleport(new Location(world, -1000, 171, 2000));
+                                p.teleport(new Location(world, -1003.0, 81, 2021.0));
                                 Bukkit.getPluginManager().callEvent(new PlayerEndGameEvent(p,this));
                             }, 100);
                             Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -946,7 +948,7 @@ public class Tag4Game extends Game implements Listener {
                             p.resetPlayerWeather();
                             p.resetPlayerTime();
                             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                                p.teleport(new Location(world, -1000, 171, 2000));
+                                p.teleport(new Location(world, -1003.0, 81, 2021.0));
                                 Bukkit.getPluginManager().callEvent(new PlayerEndGameEvent(p,this));
                             }, 100);
                             Bukkit.getScheduler().runTaskLater(plugin, () -> {
