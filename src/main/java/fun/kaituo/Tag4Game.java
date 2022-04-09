@@ -609,7 +609,7 @@ public class Tag4Game extends Game implements Listener {
                     e.remove();
                 }
             }
-            clearChests();
+            //clearChests();
             for (Map.Entry<ArmorStand, ArmorStand> entry : armourStandMap.entrySet()) {
                 entry.getKey().remove();
                 entry.getValue().remove();
