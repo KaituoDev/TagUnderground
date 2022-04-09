@@ -133,7 +133,7 @@ public class Tag4 extends JavaPlugin implements Listener {
         }
         Bukkit.getPluginManager().registerEvents(this, this);
         gameTime = 8400;
-        Sign sign = (Sign) world.getBlockAt(-1000,78,1015).getState();
+        Sign sign = (Sign) world.getBlockAt(-999, 173, 2009).getState();
         sign.setLine(2,"当前时间为 " + gameTime/1200 + " 分钟");
         sign.update();
         GameUtils.registerGame(getGameInstance());
