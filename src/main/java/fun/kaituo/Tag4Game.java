@@ -70,7 +70,7 @@ public class Tag4Game extends Game implements Listener {
 
     private Tag4Game(Tag4 plugin) {
         this.plugin = plugin;
-        initializeGame(plugin, "Tag4", "§f白雪城", new Location(world,-1000, 171, 2000),
+        initializeGame(plugin, "Tag4", "§f待定", new Location(world,-1000, 171, 2000),
                 new BoundingBox(-1966, 169, 2064,-1063, 63, 1935));
         initializeButtons(new Location(world,-999, 172, 2009),BlockFace.NORTH,
                 new Location(world, -1000, 172, 2009),BlockFace.NORTH);
