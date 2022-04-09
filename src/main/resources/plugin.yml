@@ -1,0 +1,6 @@
+api-version: 1.13
+name: Tag3
+main: fun.kaituo.Tag3
+version: 1.0
+author: YFshadaow
+depend: [GameUtils]
