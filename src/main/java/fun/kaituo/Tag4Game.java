@@ -97,7 +97,7 @@ public class Tag4Game extends Game implements Listener {
         initializeGame(plugin, "Tag4", "§f待定", new Location(world, -1003.0, 81, 2021.0),
                 new BoundingBox(-1200, 0, 1800, -800, 200, 2200));
         initializeButtons(new Location(world, -1003, 82, 2027), BlockFace.NORTH,
-                new Location(world, -1003, 82, 2026), BlockFace.NORTH);
+                new Location(world, -1004, 82, 2027), BlockFace.NORTH);
         players = Tag4.players;
         tag4.registerNewObjective("tag4", "dummy", "鬼抓人");
         tag4.getObjective("tag4").setDisplaySlot(DisplaySlot.SIDEBAR);
