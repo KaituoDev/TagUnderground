@@ -150,6 +150,11 @@ public class Tag4Game extends Game implements Listener {
             p.sendMessage("获得生命恢复与发光！");
             p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 200, 0, false, false));
             p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 100, 0, false, false));
+            for (Player devil : devils) {
+                if (getTeamPlayerIsIn(devil).equals("tag3L")) {
+                    devil.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 1, true, false));
+                }
+            }
         }
     }
 
@@ -163,6 +168,9 @@ public class Tag4Game extends Game implements Listener {
             }
             case "tag4G" -> {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 10000000, 0, false, false));
+            }
+            case "tag4C" -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 10000000, 1, false, false));
             }
         }
         p.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 999999, 0, false, false));
@@ -256,12 +264,35 @@ public class Tag4Game extends Game implements Listener {
             return;
         }//不在tag4里
         if (devils.contains(executor)) { //是鬼
-            return;
+            if (pie.getItem() == null) {
+                return;
+            }//没有物品
+            //这里开始添加内容
+
+            switch (pie.getItem().getType()) {
+                case EMERALD -> {
+                    if (checkCoolDown(executor, 1200, cd2)) {
+                        for (Player p: humans) {
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 100, 0, true, false));
+                        }
+                        for (Player p : devils) {
+                            if (getTeamPlayerIsIn(p).equals("tag3L")) {
+                                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 1, true, false));
+                            }
+                        }
+                    }
+                }
+            }
         } else if (humans.contains(executor)) { //是人
             if (pie.getClickedBlock() != null) {
                 if (pie.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) {
                     if (!pie.getPlayer().isSneaking()) {
                         executor.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 60, 0));
+                        for (Player p : devils) {
+                            if (getTeamPlayerIsIn(p).equals("tag3L")) {
+                                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 1, true, false));
+                            }
+                        }
                         return;
                     }
                 }
@@ -306,9 +337,19 @@ public class Tag4Game extends Game implements Listener {
                     if (executor.getHealth() * 2 < executor.getMaxHealth()) {
                         executor.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, (int) (executor.getMaxHealth() * 10), 0, false, false));
                         executor.setHealth(executor.getHealth() + executor.getMaxHealth() / 2);
+                        for (Player p : devils) {
+                            if (getTeamPlayerIsIn(p).equals("tag3L")) {
+                                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (int) (executor.getMaxHealth() * 10), 1, true, false));
+                            }
+                        }
                     } else {
                         executor.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, (int) ((executor.getMaxHealth() - executor.getHealth()) * 20), 0, false, false));
                         executor.setHealth(executor.getMaxHealth());
+                        for (Player p : devils) {
+                            if (getTeamPlayerIsIn(p).equals("tag3L")) {
+                                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (int) ((executor.getMaxHealth() - executor.getHealth()) * 20), 1, true, false));
+                            }
+                        }
                     }
                 }
                 case HONEY_BOTTLE -> {
@@ -415,17 +456,35 @@ public class Tag4Game extends Game implements Listener {
         if (humans.contains(edbee.getDamager())) {
             edbee.setCancelled(true);
         }
-        if (devils.contains(edbee.getDamager()) && humans.contains(edbee.getEntity())) {
+        Player victim = (Player) edbee.getEntity();
+        if (devils.contains(edbee.getDamager()) && humans.contains(victim)) {
+            if (getTeamPlayerIsIn((Player) edbee.getDamager()).equals("tag4C")) {
+                if (scoreboard.getTeam("tag4Y").hasPlayer(victim)) {
+                    victim.sendMessage("§a成功免疫最大生命减少效果！");
+                } else {
+                    if (victim.getMaxHealth() > 3) {
+                        victim.sendMessage("§c被巴风特攻击，最大生命值减少！");
+                        victim.setMaxHealth(victim.getMaxHealth() - 3);
+                        victim.setHealth(victim.getMaxHealth());
+                    } else {
+                        victim.sendMessage("§a生命上限过低，无法继续减少！");
+                    }
+                }
+            }
+            int freezeTime = 60;
+            if (getTeamPlayerIsIn((Player) edbee.getDamager()).equals("Tag4E")) {
+                freezeTime = 100;
+            }
             Location l = edbee.getDamager().getLocation().clone();
             int id = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                 edbee.getDamager().teleport(l);
             }, 1, 1);
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 Bukkit.getScheduler().cancelTask(id);
-            }, 60);
-            ((Player) edbee.getDamager()).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 254, false, false));
-            ((Player) edbee.getDamager()).addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 60, 190, false, false));
-            ((Player) edbee.getDamager()).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 60, 254, false, false));
+            }, freezeTime);
+            ((Player) edbee.getDamager()).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, freezeTime, 254, false, false));
+            ((Player) edbee.getDamager()).addPotionEffect(new PotionEffect(PotionEffectType.JUMP, freezeTime, 190, false, false));
+            ((Player) edbee.getDamager()).addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, freezeTime, 254, false, false));
         }
     }
 
@@ -472,6 +531,13 @@ public class Tag4Game extends Game implements Listener {
                 p.sendMessage("§f" + pde.getEntity().getName() + " §c 永远葬身于寒冷");
             }
             return;
+        } else if (pde.getEntity().getKiller() != null) {
+            if (scoreboard.getTeam("tag4C").hasPlayer(pde.getEntity().getKiller())) {
+                for (Player p : players) {
+                    p.sendMessage("§f" + pde.getEntity().getName() + " §c 永远葬身于寒冷");
+                }
+                return;
+            }
         }
         Location l = pde.getEntity().getLocation().clone();
 
@@ -511,7 +577,7 @@ public class Tag4Game extends Game implements Listener {
         }, 5);
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             ice.getEquipment().setHelmet(new ItemStack(Material.ICE));
-            head.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 550, 0));
+            head.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 594, 0));
         }, 6);
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (head.isValid()) {
@@ -757,6 +823,11 @@ public class Tag4Game extends Game implements Listener {
                                         victim.sendMessage("§7梅贝尔§f在场，所有鬼发光5秒！");
                                         if (devils.contains(victim)) {
                                             victim.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 100, 0, false, false));
+                                            for (Player devil : devils) {
+                                                if (getTeamPlayerIsIn(devil).equals("tag3L")) {
+                                                    devil.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 1, true, false));
+                                                }
+                                            }
                                         }
                                     }
                                     return;
@@ -809,8 +880,16 @@ public class Tag4Game extends Game implements Listener {
                             }
                         }
                     }
-                }, countDownSeconds * 20L + 400 + 600, 1200)); //600 1200
+                }, countDownSeconds * 20L + 400 + 600, 1200));
 
+                taskIds.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+                    for (Player p : devils) {
+                        if (getTeamPlayerIsIn(p).equals("Tag4E")) {
+                            p.getInventory().addItem(new ItemStack(Material.ENDER_PEARL));
+                            p.sendMessage("§a获得末影珍珠！");
+                        }
+                    }
+                }, countDownSeconds * 20L + 400, 600));
 
                 taskIds.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                     long time = getTime(world);
