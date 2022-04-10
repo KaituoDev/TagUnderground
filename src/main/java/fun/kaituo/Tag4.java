@@ -25,8 +25,8 @@ public class Tag4 extends JavaPlugin implements Listener {
     static List<Player> players;
     static long gameTime;
     Scoreboard scoreboard;
-    List<String> teamNames = new ArrayList<>(List.of(new String[]{"tag4Y", "tag4W","tag4X","tag4H",
-            "tag4R","tag4G","tag4B","tag4E","tag4L","tag4C"}));
+    List<String> teamNames = new ArrayList<>(List.of("tag4Y", "tag4W","tag4X","tag4H",
+            "tag4R","tag4G","tag4B","tag4E","tag4L","tag4C", "tag4Q", "tag4T", "tag4U", "tag4I", "tag4O", "tag4P"));
     List<Team> teams = new ArrayList<>();
 
     public static Tag4Game getGameInstance() {
@@ -144,6 +144,48 @@ public class Tag4 extends JavaPlugin implements Listener {
             sendMessageToTag4Players(player, "米兰达", "§8");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4E " + player.getName());
             player.sendMessage("§8米兰达§f： 总有一天，这个虚假的世界会迎来崩坏的时刻......");
+        }else if (x == -1011 && y == 81 && z == 2027) {
+            if (scoreboard.getTeam("tag4Q").hasPlayer(player)) {
+                return;
+            }
+            sendMessageToTag4Players(player, "比尔", "§2");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4Q " + player.getName());
+            player.sendMessage("§2比尔§f： 那个...我为"+ player.getName()+"做了便当...不介意的话请您尝尝看吧~");
+        }else if (x == -1012 && y == 81 && z == 2027) {
+            if (scoreboard.getTeam("tag4T").hasPlayer(player)) {
+                return;
+            }
+            sendMessageToTag4Players(player, "尤妮丝", "§f");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4T " + player.getName());
+            player.sendMessage("§f尤妮丝§f： 很好，让我们一起守护平等而纯洁的世界吧");
+        }else if (x == -1013 && y == 81 && z == 2027) {
+            if (scoreboard.getTeam("tag4U").hasPlayer(player)) {
+                return;
+            }
+            sendMessageToTag4Players(player, "渡渡", "§7");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4U " + player.getName());
+            player.sendMessage("§7渡渡§f： 哼哼——！看来你的心已被吾辈俘获，是这么回事吧？");
+        }else if (x == -1014 && y == 81 && z == 2027) {
+            if (scoreboard.getTeam("tag4I").hasPlayer(player)) {
+                return;
+            }
+            sendMessageToTag4Players(player, "假海龟", "§3");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4I " + player.getName());
+            player.sendMessage("§3假海龟§f： 是呢...只要有你在就没什么可怕的了......");
+        }else if (x == -1015 && y == 81 && z == 2027) {
+            if (scoreboard.getTeam("tag4O").hasPlayer(player)) {
+                return;
+            }
+            sendMessageToTag4Players(player, "维多利雅", "§d");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4O " + player.getName());
+            player.sendMessage("§d维多利雅§f： 欢迎回来,主人大人");
+        }else if (x == -1016 && y == 81 && z == 2027) {
+            if (scoreboard.getTeam("tag4P").hasPlayer(player)) {
+                return;
+            }
+            sendMessageToTag4Players(player, "莉耶芙", "§a");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4P " + player.getName());
+            player.sendMessage("§a莉耶芙§f： 对吧,这果然就是所谓的命运啊!");
         }
     }
     public void onEnable() {
