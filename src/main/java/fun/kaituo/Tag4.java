@@ -41,7 +41,7 @@ public class Tag4 extends JavaPlugin implements Listener {
         if (!pie.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             return;
         }
-        if (!pie.getClickedBlock().getType().equals(Material.OAK_BUTTON)) {
+        if (!(pie.getClickedBlock().getBlockData() instanceof TrapDoor)) {
             return;
         }
         if (!pie.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
@@ -55,7 +55,7 @@ public class Tag4 extends JavaPlugin implements Listener {
         if (!pie.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             return;
         }
-        if (!(pie.getClickedBlock().getBlockData() instanceof TrapDoor)) {
+        if (!pie.getClickedBlock().getType().equals(Material.OAK_BUTTON)) {
             return;
         }
         if (pie.getClickedBlock().getLocation().equals(new Location(world,-1003,82,2027))) {
