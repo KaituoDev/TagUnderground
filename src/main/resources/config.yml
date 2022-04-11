@@ -1,0 +1,32 @@
+mabel:
+  blindness-duration: 100
+  glowing-interval: 600
+  glowing-duration: 100
+redhat:
+  duration: 100
+  regeneration-amplifier: 0
+  resistance-amplifier: 0
+chechirecat:
+  speed-duration: 60
+  speed-amplifier: 0
+kelti:
+  invisibility-duration: 100
+bill:
+  radiusX: 5
+  radiusY: 5
+  radiusZ: 5
+eunice:
+  duration: 100
+  cd: 1200
+dodo:
+  speed-duration: 60
+faketurtle:
+  resistence-amplifier: 1
+  slowness-amplifier: 1
+  invisibility-duration: 100
+leaf:
+  gadget-interval: 900
+victoria:
+  radiusX: 5
+  radiusY: 5
+  radiusZ: 5
