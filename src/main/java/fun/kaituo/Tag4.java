@@ -4,6 +4,7 @@ package fun.kaituo;
 import fun.kaituo.event.PlayerChangeGameEvent;
 import org.bukkit.*;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.type.TrapDoor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -14,6 +15,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.BoundingBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,17 +30,32 @@ public class Tag4 extends JavaPlugin implements Listener {
     List<String> teamNames = new ArrayList<>(List.of("tag4Y", "tag4W","tag4X","tag4H",
             "tag4R","tag4G","tag4B","tag4E","tag4L","tag4C", "tag4Q", "tag4T", "tag4U", "tag4I", "tag4O", "tag4P"));
     List<Team> teams = new ArrayList<>();
+    BoundingBox box = new BoundingBox(-1200, 0, 1800, -800, 200, 2200);
 
     public static Tag4Game getGameInstance() {
         return Tag4Game.getInstance();
     }
 
     @EventHandler
-    public void onButtonClicked(PlayerInteractEvent pie) {
+    public void preventClickingTrapDoor(PlayerInteractEvent pie) {
         if (!pie.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             return;
         }
         if (!pie.getClickedBlock().getType().equals(Material.OAK_BUTTON)) {
+            return;
+        }
+        if (!pie.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+            if (box.contains(pie.getClickedBlock().getLocation().toVector())) {
+                pie.setCancelled(true);
+            }
+        }
+    }
+    @EventHandler
+    public void onButtonClicked(PlayerInteractEvent pie) {
+        if (!pie.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            return;
+        }
+        if (!(pie.getClickedBlock().getBlockData() instanceof TrapDoor)) {
             return;
         }
         if (pie.getClickedBlock().getLocation().equals(new Location(world,-1003,82,2027))) {
