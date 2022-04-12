@@ -298,6 +298,9 @@ public class Tag4Game extends Game implements Listener {
         if (!epee.getCause().equals(EntityPotionEffectEvent.Cause.PLUGIN)) {
             return;
         }
+        if (epee.getNewEffect() == null) {
+            return;
+        }
         if (!epee.getNewEffect().getType().equals(PotionEffectType.GLOWING)) {
             return;
         }
