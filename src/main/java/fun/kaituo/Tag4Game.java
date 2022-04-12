@@ -127,7 +127,7 @@ public class Tag4Game extends Game implements Listener {
         tag4norden = scoreboard.getTeam("tag4norden");
         tag4baphomet = scoreboard.getTeam("tag4baphomet");
         tag4chechirecat = scoreboard.getTeam("tag4chechirecat");
-        tag4redhat = scoreboard.getTeam("tag4heinedhat");
+        tag4redhat = scoreboard.getTeam("tag4redhat");
         tag4alice = scoreboard.getTeam("tag4alice");
         tag4mabel = scoreboard.getTeam("tag4mabel");
         tag4kelti = scoreboard.getTeam("tag4kelti");
