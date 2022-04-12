@@ -558,8 +558,9 @@ public class Tag4Game extends Game implements Listener {
                         damager.sendMessage("§c获得加速、恢复和隐身！");
                     }
                 }
+            } else {
+                edbee.setCancelled(true);
             }
-            //edbee.setCancelled(true); //需要击退效果 所以不取消
         } else if (humans.contains(damager) && humans.contains(victim)) {
             edbee.setCancelled(true);
         } else if (devils.contains(damager) && humans.contains(victim)) {
