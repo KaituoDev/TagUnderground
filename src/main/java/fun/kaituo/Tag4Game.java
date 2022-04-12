@@ -161,7 +161,7 @@ public class Tag4Game extends Game implements Listener {
 
 
         Player p = (Player) ede.getEntity();
-        if (scoreboard.getPlayerTeam(p).equals(tag4chechirecat)) {
+        if (tag4chechirecat.hasPlayer(p)) {
             if (ede.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
                 ((Player) ede.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, c.getInt("chechirecat.speed-duration"), c.getInt("chechirecat.speed-amplifier"), false, false));
                 ede.setCancelled(true);
@@ -176,14 +176,14 @@ public class Tag4Game extends Game implements Listener {
 
 
         //以下是自带天赋
-        if (scoreboard.getPlayerTeam(p).equals(tag4kelti)) {
+        if (tag4kelti.hasPlayer(p)) {
             if (checkCoolDown(p, 60)) {
                 p.sendMessage("§b获得暂时隐身！");
                 p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, c.getInt("kelti.invisibility-duration"), 0, false, false));
             }
-        } else if (scoreboard.getPlayerTeam(p).equals(tag4dodo)) {
+        } else if (tag4dodo.hasPlayer(p)) {
             p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, c.getInt("dodo.speed-duration"), 1));
-        } else if (scoreboard.getPlayerTeam(p).equals(tag4redhat)) {
+        } else if (tag4redhat.hasPlayer(p)) {
             p.sendMessage("获得生命恢复与发光！");
             p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, c.getInt("redhat.duration"), c.getInt("redhat.regeneration-amplifier"), false, false));
             p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, c.getInt("redhat.duration"), 0, false, false));
@@ -305,7 +305,7 @@ public class Tag4Game extends Game implements Listener {
             return;
         }
         for (Player p : devils) {
-            if (scoreboard.getPlayerTeam(p).equals(tag4lindamayer)) {
+            if (tag4lindamayer.hasPlayer(p)) {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, epee.getNewEffect().getDuration(), 1, true, false));
             }
         }
@@ -333,7 +333,7 @@ public class Tag4Game extends Game implements Listener {
                             p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 200, 0, true, false));
                         }
                         for (Player p : devils) {
-                            if (scoreboard.getPlayerTeam(p).equals(tag4hein)) {
+                            if (tag4hein.hasPlayer(p)) {
                                 for (Player victim: humans) {
                                     victim.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 100, 0, true, false));
                                 }
@@ -359,14 +359,14 @@ public class Tag4Game extends Game implements Listener {
 
             switch (pie.getItem().getType()) {
                 case COAL -> {
-                    if (scoreboard.getPlayerTeam(executor).equals(tag4norden) || scoreboard.getPlayerTeam(executor).equals(tag4victoria)) {
+                    if (tag4norden.hasPlayer(executor) || tag4victoria.hasPlayer(executor)) {
                         executor.sendMessage("§c生命全部恢复！");
                         pie.getItem().setAmount(pie.getItem().getAmount() - 1);
                     } else {
                         if (executor.getMaxHealth() > 3) {
                             executor.sendMessage("§c最大生命值减少，生命全部恢复！");
                             executor.setMaxHealth(executor.getMaxHealth() - 3);
-                            if (!scoreboard.getPlayerTeam(executor).equals(tag4bill) && !scoreboard.getPlayerTeam(executor).equals(tag4dodo)) {
+                            if ((!tag4bill.hasPlayer(executor)) && !(tag4dodo.hasPlayer(executor))) {
                                 executor.setHealth(executor.getMaxHealth());
                             } else {
                                 executor.sendMessage("§c你无法通过这种方式恢复生命值！");
@@ -395,16 +395,16 @@ public class Tag4Game extends Game implements Listener {
                     executor.sendMessage("§c回复一半最大生命值，获得与回复量相同的发光时长！");
                     if (executor.getHealth() * 2 < executor.getMaxHealth()) {
                         executor.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, (int) (executor.getMaxHealth() * 10), 0, false, false));
-                        if (!scoreboard.getPlayerTeam(executor).equals(tag4bill) && !scoreboard.getPlayerTeam(executor).equals(tag4dodo)) {
+                        if ((!tag4bill.hasPlayer(executor)) && !(tag4dodo.hasPlayer(executor))) {
                             executor.setHealth(executor.getHealth() + executor.getMaxHealth() / 2);
                         }else {
                             executor.sendMessage("§c你无法通过这种方式恢复生命值！");
                         }
                     } else {
                         executor.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, (int) ((executor.getMaxHealth() - executor.getHealth()) * 20), 0, false, false));
-                        if (!scoreboard.getPlayerTeam(executor).equals(tag4bill) && !scoreboard.getPlayerTeam(executor).equals(tag4dodo)) {
+                        if ((!tag4bill.hasPlayer(executor)) && !(tag4dodo.hasPlayer(executor))) {
                             executor.setHealth(executor.getMaxHealth());
-                        }else {
+                        } else {
                             executor.sendMessage("§c你无法通过这种方式恢复生命值！");
                         }
                     }
@@ -420,7 +420,7 @@ public class Tag4Game extends Game implements Listener {
                     executor.getInventory().addItem(cooked_chicken);
                     executor.sendMessage("§b获得加速！");
                     executor.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 0, false, false));
-                    if (scoreboard.getPlayerTeam(executor).equals(tag4dodo)) {
+                    if ((tag4dodo.hasPlayer(executor))) {
                         executor.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, 1, 0));
                     }
                 }
@@ -434,7 +434,7 @@ public class Tag4Game extends Game implements Listener {
                     executor.sendMessage("§a为身边己方角色恢复全部生命值！");
                     for (Entity e : executor.getNearbyEntities(c.getInt("bill.radiusX"),c.getInt("bill.radiusY"),c.getInt("bill.radiusZ"))) {
                         if (humans.contains(e)) {
-                            if (!scoreboard.getPlayerTeam((Player)e).equals(tag4bill) && !scoreboard.getPlayerTeam((Player)e).equals(tag4dodo)) {
+                            if ((!tag4bill.hasPlayer(executor)) && !(tag4dodo.hasPlayer(executor))) {
                                 ((Player)e).setHealth(((Player)e).getMaxHealth());;
                             }else {
                                 executor.sendMessage("§c你无法通过这种方式恢复生命值！");
@@ -549,7 +549,7 @@ public class Tag4Game extends Game implements Listener {
         Player victim = (Player) edbee.getEntity();
         Player damager = (Player) edbee.getDamager();
         if (humans.contains(damager) && devils.contains(victim)) {
-            if (scoreboard.getPlayerTeam(damager).equals(tag4eunice)) {
+            if (tag4eunice.hasPlayer(damager)) {
                 if (damager.getInventory().getItemInMainHand().getType().equals(Material.IRON_SWORD)) {
                     if (checkCoolDown(damager,  c.getInt("eunice.cd"))) {
                         damager.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, c.getInt("eunice.duration"), 1, false, false));
@@ -563,8 +563,8 @@ public class Tag4Game extends Game implements Listener {
         } else if (humans.contains(damager) && humans.contains(victim)) {
             edbee.setCancelled(true);
         } else if (devils.contains(damager) && humans.contains(victim)) {
-            if (scoreboard.getPlayerTeam(damager).equals(tag4baphomet)) {
-                if (scoreboard.getPlayerTeam(victim).equals(tag4norden)) {
+            if (tag4baphomet.hasPlayer(damager)) {
+                if (tag4norden.hasPlayer(victim)) {
                     victim.sendMessage("§a成功免疫最大生命减少效果！");
                 } else {
                     if (victim.getMaxHealth() > 3) {
@@ -575,13 +575,13 @@ public class Tag4Game extends Game implements Listener {
                     }
                 }
             }
-            if (scoreboard.getPlayerTeam(victim).equals(tag4mabel)) {
+            if (tag4mabel.hasPlayer(victim)) {
                 damager.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, c.getInt("mabel.blindness-duration"), 0));
             }
             int freezeTime = 60;
-            if (scoreboard.getPlayerTeam(damager).equals(tag4miranda)) { //米兰达
+            if (tag4miranda.hasPlayer(damager)) { //米兰达
                 freezeTime = 90;
-            } else if (scoreboard.getPlayerTeam(damager).equals(tag4baphomet)) { //巴风特
+            } else if (tag4baphomet.hasPlayer(damager)) { //巴风特
                 freezeTime = 50;
             }
             Location l = damager.getLocation().clone();
@@ -641,7 +641,7 @@ public class Tag4Game extends Game implements Listener {
             }
             return;
         } else if (pde.getEntity().getKiller() != null) {
-            if (scoreboard.getPlayerTeam(pde.getEntity().getKiller()).equals(tag4baphomet)) {
+            if (tag4baphomet.hasPlayer(pde.getEntity().getKiller())) {
                 for (Player p : players) {
                     p.sendMessage("§f" + pde.getEntity().getName() + " §c 被逐出了箱庭！");
                 }
@@ -727,7 +727,9 @@ public class Tag4Game extends Game implements Listener {
         if (!((Player) erhe.getEntity()).getGameMode().equals(GameMode.ADVENTURE)) {
             return;
         }
-        if (scoreboard.getPlayerTeam((Player)erhe.getEntity()).equals(tag4bill)) {
+        if (tag4bill.hasPlayer((Player) erhe.getEntity())) {
+            erhe.setCancelled(true);
+        } else if (tag4dodo.hasPlayer((Player) erhe.getEntity())) {
             erhe.setCancelled(true);
         }
         if (erhe.getRegainReason().equals(EntityRegainHealthEvent.RegainReason.SATIATED)) {
@@ -918,9 +920,9 @@ public class Tag4Game extends Game implements Listener {
                         p.getInventory().setItem(EquipmentSlot.FEET, boots);
                     }
                     for (Player p : players) {
-                        if (scoreboard.getPlayerTeam(p).equals(tag4leaf)) {
+                        if (tag4leaf.hasPlayer(p)) {
                             p.getInventory().addItem(coal);
-                        } else if (scoreboard.getPlayerTeam(p).equals(tag4lindamayer)) {
+                        } else if (tag4lindamayer.hasPlayer(p)) {
                             cd.put(p, getTime(world) - 3000);
                         }
                         p.sendTitle("§e游戏开始！", null, 2, 16, 2);
@@ -993,7 +995,7 @@ public class Tag4Game extends Game implements Listener {
 
                 taskIds.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                     for (Player p : devils) {
-                        if (scoreboard.getPlayerTeam(p).equals(tag4miranda)) {
+                        if (tag4miranda.hasPlayer(p)) {
                             int counter = 0;
                             for (ItemStack i : p.getInventory().all(Material.ENDER_PEARL).values()) {
                                 counter += i.getAmount();
@@ -1009,7 +1011,7 @@ public class Tag4Game extends Game implements Listener {
 
                 taskIds.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                     for (Player p : humans) {
-                        if (scoreboard.getPlayerTeam(p).equals(tag4leaf)) {
+                        if (tag4leaf.hasPlayer(p)) {
                             int spawnNo = random.nextInt(totalWeight);
                             int counter = 0;
                             for (int i = 0; i < gadgets.size(); i++) {
@@ -1026,7 +1028,7 @@ public class Tag4Game extends Game implements Listener {
 
                 taskIds.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                     for (Player p : humans) {
-                        if (scoreboard.getPlayerTeam(p).equals(tag4victoria)) {
+                        if (tag4victoria.hasPlayer(p)) {
                             for (Entity e : p.getNearbyEntities(c.getInt("victoria.radiusX"),c.getInt("victoria.radiusY"),c.getInt("victoria.radiusZ"))) {
                                 if (players.contains(e)) {
                                     return;
@@ -1039,7 +1041,7 @@ public class Tag4Game extends Game implements Listener {
 
                 taskIds.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                     for (Player p : humans) {
-                        if (scoreboard.getPlayerTeam(p).equals(tag4kelti)) {
+                        if (tag4kelti.hasPlayer(p)) {
                             if (p.isSwimming()) {
                                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 50, 0, false, false));
                                 p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 50, 0, true, false));
