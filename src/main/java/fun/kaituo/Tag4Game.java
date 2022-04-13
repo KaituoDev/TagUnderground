@@ -52,7 +52,7 @@ public class Tag4Game extends Game implements Listener {
     Team team;
 
     Team tag4norden;
-    Team tag4chechirecat;
+    Team tag4cheshirecat;
     Team tag4redhat;
     Team tag4alice;
     Team tag4mabel;
@@ -126,7 +126,7 @@ public class Tag4Game extends Game implements Listener {
         c = plugin.getConfig();
         tag4norden = scoreboard.getTeam("tag4norden");
         tag4baphomet = scoreboard.getTeam("tag4baphomet");
-        tag4chechirecat = scoreboard.getTeam("tag4chechirecat");
+        tag4cheshirecat = scoreboard.getTeam("tag4cheshirecat");
         tag4redhat = scoreboard.getTeam("tag4redhat");
         tag4alice = scoreboard.getTeam("tag4alice");
         tag4mabel = scoreboard.getTeam("tag4mabel");
@@ -161,9 +161,9 @@ public class Tag4Game extends Game implements Listener {
 
 
         Player p = (Player) ede.getEntity();
-        if (tag4chechirecat.hasPlayer(p)) {
+        if (tag4cheshirecat.hasPlayer(p)) {
             if (ede.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
-                ((Player) ede.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, c.getInt("chechirecat.speed-duration"), c.getInt("chechirecat.speed-amplifier"), false, false));
+                ((Player) ede.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, c.getInt("cheshirecat.speed-duration"), c.getInt("cheshirecat.speed-amplifier"), false, false));
                 ede.setCancelled(true);
             } else if (p.getInventory().contains(Material.CLOCK, 1)) {
                 removeItem(p, Material.CLOCK);
@@ -845,7 +845,7 @@ public class Tag4Game extends Game implements Listener {
             team.setAllowFriendlyFire(true);
             for (Player p : getPlayersNearHub(50, 50, 50)) {
                 switch (scoreboard.getPlayerTeam(p).getName()) {
-                    case "tag4kelti", "tag4chechirecat", "tag4mabel", "tag4norden", "tag4redhat", "tag4alice" , "tag4bill", "tag4eunice", "tag4dodo", "tag4faketurtle", "tag4victoria", "tag4leaf"-> {
+                    case "tag4kelti", "tag4cheshirecat", "tag4mabel", "tag4norden", "tag4redhat", "tag4alice" , "tag4bill", "tag4eunice", "tag4dodo", "tag4faketurtle", "tag4victoria", "tag4leaf"-> {
                         humans.add(p);
                     }
                     case "tag4hein", "tag4miranda", "tag4lindamayer","tag4baphomet" -> {

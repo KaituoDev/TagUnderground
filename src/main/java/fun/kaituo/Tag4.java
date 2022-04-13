@@ -28,7 +28,7 @@ public class Tag4 extends JavaPlugin implements Listener {
     static long gameTime;
     Scoreboard scoreboard;
     Team tag4norden;
-    Team tag4chechirecat;
+    Team tag4cheshirecat;
     Team tag4redhat;
     Team tag4alice;
     Team tag4mabel;
@@ -114,11 +114,11 @@ public class Tag4 extends JavaPlugin implements Listener {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4norden " + player.getName());
             player.sendMessage("§f诺登§f： 欢迎回来，" + player.getName() + "大人");
         } else if (x == -1006 && y == 81 && z == 2027) {
-            if (tag4chechirecat.hasPlayer(player)) {
+            if (tag4cheshirecat.hasPlayer(player)) {
                 return;
             }
             broadcastHumanChoiceMessage(player, "柴郡猫", "§d");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4chechirecat " + player.getName());
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4cheshirecat " + player.getName());
             player.sendMessage("§d柴郡猫§f： 能和你再说上话真是太好喵");
         } else if (x == -1007 && y == 81 && z == 2027) {
             if (tag4redhat.hasPlayer(player)) {
@@ -226,7 +226,7 @@ public class Tag4 extends JavaPlugin implements Listener {
         players = new ArrayList<>();
         tag4norden = scoreboard.getTeam("tag4norden");
         tag4baphomet = scoreboard.getTeam("tag4baphomet");
-        tag4chechirecat = scoreboard.getTeam("tag4chechirecat");
+        tag4cheshirecat = scoreboard.getTeam("tag4cheshirecat");
         tag4redhat = scoreboard.getTeam("tag4redhat");
         tag4alice = scoreboard.getTeam("tag4alice");
         tag4mabel = scoreboard.getTeam("tag4mabel");
@@ -242,7 +242,7 @@ public class Tag4 extends JavaPlugin implements Listener {
         tag4hein = scoreboard.getTeam("tag4hein");
         tag4lindamayer = scoreboard.getTeam("tag4lindamayer");
         tag4baphomet = scoreboard.getTeam("tag4baphomet");
-        teams = List.of(tag4norden,tag4chechirecat, tag4redhat,tag4alice,tag4mabel,tag4kelti,tag4bill,tag4eunice,tag4dodo,tag4faketurtle,tag4victoria,tag4leaf,tag4miranda,tag4hein,tag4lindamayer,tag4baphomet);
+        teams = List.of(tag4norden,tag4cheshirecat, tag4redhat,tag4alice,tag4mabel,tag4kelti,tag4bill,tag4eunice,tag4dodo,tag4faketurtle,tag4victoria,tag4leaf,tag4miranda,tag4hein,tag4lindamayer,tag4baphomet);
         Bukkit.getPluginManager().registerEvents(this, this);
         gameTime = 8400;
         Sign sign = (Sign) world.getBlockAt(-1003, 83, 2027).getState();
