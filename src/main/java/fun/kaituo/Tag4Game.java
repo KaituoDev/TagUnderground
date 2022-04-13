@@ -198,7 +198,7 @@ public class Tag4Game extends Game implements Listener {
             case "tag4kelti" -> {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 10000000, 0, false, false));
             }
-            case "tag4heinedhat" -> {
+            case "tag4redhat" -> {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 10000000, c.getInt("redhat.resistance-amplifier"), false, false));
             }
             case "tag4hein" -> {
@@ -845,7 +845,7 @@ public class Tag4Game extends Game implements Listener {
             team.setAllowFriendlyFire(true);
             for (Player p : getPlayersNearHub(50, 50, 50)) {
                 switch (scoreboard.getPlayerTeam(p).getName()) {
-                    case "tag4kelti", "tag4chechirecat", "tag4mabel", "tag4norden", "tag4heinedhat", "tag4alice" , "tag4bill", "tag4eunice", "tag4dodo", "tag4faketurtle", "tag4victoria", "tag4leaf"-> {
+                    case "tag4kelti", "tag4chechirecat", "tag4mabel", "tag4norden", "tag4redhat", "tag4alice" , "tag4bill", "tag4eunice", "tag4dodo", "tag4faketurtle", "tag4victoria", "tag4leaf"-> {
                         humans.add(p);
                     }
                     case "tag4hein", "tag4miranda", "tag4lindamayer","tag4baphomet" -> {
