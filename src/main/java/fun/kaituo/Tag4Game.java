@@ -92,7 +92,7 @@ public class Tag4Game extends Game implements Listener {
     ItemStack coal = generateItemStack(Material.COAL, "§l§8污秽的黑之魂", new String[]{"回复所有生命值，但会降低最大生命上限", "§7这个国家洋溢着大量的黑之魂！太棒了！"});
     ItemStack potion = generateItemStack(Material.POTION, "§l§1星水", new String[]{"使用后一段时间内不会受到伤害，但效果结束后会被强制击倒", "§7没有门扉的箱庭会有漂流者顺流而来，其中似乎也混杂着外来者"});
     ItemStack dragon_breath = generateItemStack(Material.DRAGON_BREATH, "§l§d心跳悦动酒", new String[]{"瞬间恢复一定生命值，但会获得两倍回复量的发光时间", "§7梅贝尔最爱喝的酒！"});
-    ItemStack honey_bottle = generateItemStack(Material.HONEY_BOTTLE, "§l§6柴郡猫特调", new String[]{"获得短时间的缓降效果", "§7原材料包含柴郡猫的体液"});
+    ItemStack honey_bottle = generateItemStack(Material.HONEY_BOTTLE, "§l§6柴郡猫特调", new String[]{"获得短时间的缓降效果", "§7用柴郡猫的体液调制合成的药水，具体成分不明"});
     ItemStack enchanted_book = generateItemStack(Material.ENCHANTED_BOOK, "§l§8§k爱丽丝·里德尔的誓约", new String[]{"持有者速度永久增加，但无法被复活", "§7§m我将永远爱着你"});
 
 
@@ -930,6 +930,7 @@ public class Tag4Game extends Game implements Listener {
                         } else if (tag4lindamayer.hasPlayer(p)) {
                             cd.put(p, getTime(world) - 3000);
                         }
+                        p.setHealth(20);
                         p.sendTitle("§e游戏开始！", null, 2, 16, 2);
                         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1f, 2f);
                     }
