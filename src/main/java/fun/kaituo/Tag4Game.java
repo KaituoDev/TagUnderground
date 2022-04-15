@@ -141,7 +141,6 @@ public class Tag4Game extends Game implements Listener {
             int y = c.getInt("chest-locations." + key + ".y");
             int z = c.getInt("chest-locations." + key + ".z");
             locations.add(new Location(world, x, y, z));
-            Bukkit.broadcastMessage(world.getBlockAt(locations.get(counter)).getType().toString());
             counter++;
         }
     }
@@ -988,7 +987,7 @@ public class Tag4Game extends Game implements Listener {
                     }
                     for (Location loc : locations) {
                         double spawnChance = random.nextDouble();
-                        if (spawnChance < 2) {//overall chance
+                        if (spawnChance < 0.5) {//overall chance
                             int spawnNo = random.nextInt(totalWeight);
                             int counter = 0;
                             for (int i = 0; i < gadgets.size(); i++) {
@@ -1000,7 +999,7 @@ public class Tag4Game extends Game implements Listener {
                             }
                         }
                     }
-                }, countDownSeconds * 20L + 400 + 6, 12));
+                }, countDownSeconds * 20L + 400 + 600, 1200));
 
                 taskIds.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                     for (Player p : devils) {
