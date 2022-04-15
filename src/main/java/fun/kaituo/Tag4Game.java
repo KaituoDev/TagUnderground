@@ -593,8 +593,6 @@ public class Tag4Game extends Game implements Listener {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 Bukkit.getScheduler().cancelTask(id);
             }, freezeTime);
-            damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, freezeTime, 254, false, false));
-            damager.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, freezeTime, 190, false, false));
             damager.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, freezeTime, 254, false, false));
         }
     }
