@@ -92,7 +92,7 @@ public class Tag4Game extends Game implements Listener {
     ItemStack coal = generateItemStack(Material.COAL, "§l§8污秽的黑之魂", new String[]{"回复所有生命值，但会降低最大生命上限", "§7这个国家洋溢着大量的黑之魂！太棒了！"});
     ItemStack potion = generateItemStack(Material.POTION, "§l§1星水", new String[]{"使用后一段时间内不会受到伤害，但效果结束后会被强制击倒", "§7没有门扉的箱庭会有漂流者顺流而来，其中似乎也混杂着外来者"});
     ItemStack dragon_breath = generateItemStack(Material.DRAGON_BREATH, "§l§d心跳悦动酒", new String[]{"瞬间恢复一定生命值，但会获得两倍回复量的发光时间", "§7梅贝尔最爱喝的酒！"});
-    ItemStack honey_bottle = generateItemStack(Material.HONEY_BOTTLE, "§l§6黄金的蜂蜜酒", new String[]{"减少一半的当前生命值，获得减少数量两倍的加速时间", "§7带翼的贵妇人相当喜欢这个蜂蜜酒"});
+    ItemStack honey_bottle = generateItemStack(Material.HONEY_BOTTLE, "§l§6柴郡猫特调", new String[]{"获得短时间的缓降效果", "§7原材料包含柴郡猫的体液"});
     ItemStack enchanted_book = generateItemStack(Material.ENCHANTED_BOOK, "§l§8§k爱丽丝·里德尔的誓约", new String[]{"持有者速度永久增加，但无法被复活", "§7§m我将永远爱着你"});
 
 
@@ -135,13 +135,11 @@ public class Tag4Game extends Game implements Listener {
 
         ConfigurationSection section = c.getConfigurationSection("chest-locations");
 
-        int counter = 0;
         for (String key : section.getKeys(false)) {
             int x = c.getInt("chest-locations." + key + ".x");
             int y = c.getInt("chest-locations." + key + ".y");
             int z = c.getInt("chest-locations." + key + ".z");
             locations.add(new Location(world, x, y, z));
-            counter++;
         }
     }
 
@@ -415,9 +413,8 @@ public class Tag4Game extends Game implements Listener {
                 }
                 case HONEY_BOTTLE -> {
                     pie.getItem().setAmount(pie.getItem().getAmount() - 1);
-                    executor.sendMessage("§e减少一半的当前生命值，获得与减少量两倍相同的加速时间！");
-                    executor.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (int) (executor.getHealth() * 20), 0, false, false));
-                    executor.setHealth(executor.getHealth() / 2);
+                    executor.sendMessage("§e获得缓降！");
+                    executor.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 0, false, false));
                 }
                 case FEATHER -> {
                     pie.getItem().setAmount(pie.getItem().getAmount() - 1);
