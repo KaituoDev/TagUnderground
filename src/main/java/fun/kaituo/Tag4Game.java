@@ -48,6 +48,11 @@ public class Tag4Game extends Game implements Listener {
     Tag4 plugin;
     List<Player> humans = new ArrayList<>();
     List<Player> devils = new ArrayList<>();
+
+
+    List<Location> locations = new ArrayList<>();
+
+
     long startTime;
     long gameTime;
     Team team;
@@ -70,7 +75,6 @@ public class Tag4Game extends Game implements Listener {
     Team tag4lindamayer;
     Team tag4baphomet;
 
-    Location[] locations;
     boolean running = false;
     int countDownSeconds = 10;
     FileConfiguration c;
@@ -129,7 +133,6 @@ public class Tag4Game extends Game implements Listener {
         tag4lindamayer = scoreboard.getTeam("tag4lindamayer");
         tag4baphomet = scoreboard.getTeam("tag4baphomet");
 
-        locations = new Location[] {};
         ConfigurationSection section = c.getConfigurationSection("chest-locations");
 
         int counter = 0;
@@ -137,8 +140,8 @@ public class Tag4Game extends Game implements Listener {
             int x = c.getInt("chest-locations." + key + ".x");
             int y = c.getInt("chest-locations." + key + ".y");
             int z = c.getInt("chest-locations." + key + ".z");
-            locations[counter] = new Location(world, x, y, z);
-            Bukkit.broadcastMessage(world.getBlockAt(locations[counter]).getType().toString());
+            locations.add(new Location(world, x, y, z));
+            Bukkit.broadcastMessage(world.getBlockAt(locations.get(counter)).getType().toString());
             counter++;
         }
     }
