@@ -10,6 +10,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -69,22 +70,7 @@ public class Tag4Game extends Game implements Listener {
     Team tag4lindamayer;
     Team tag4baphomet;
 
-    Location[] locations = new Location[]{
-            new Location(world, -1005, 69, 1000),
-            new Location(world, -991, 65, 1005),
-            new Location(world, -1019, 66, 1014),
-            new Location(world, -1010, 67, 1005),
-            new Location(world, -1018, 66, 992),
-            new Location(world, -983, 64, 997),
-            new Location(world, -998, 54, 1009),
-            new Location(world, -986, 56, 1012),
-            new Location(world, -1015, 54, 1015),
-            new Location(world, -1017, 51, 996),
-            new Location(world, -981, 57, 986),
-            new Location(world, -986, 48, 981),
-            new Location(world, -1000, 68, 1013),
-            new Location(world, -1001, 53, 998),
-            new Location(world, -991, 57, 998)};
+    Location[] locations;
     boolean running = false;
     int countDownSeconds = 10;
     FileConfiguration c;
@@ -142,6 +128,19 @@ public class Tag4Game extends Game implements Listener {
         tag4hein = scoreboard.getTeam("tag4hein");
         tag4lindamayer = scoreboard.getTeam("tag4lindamayer");
         tag4baphomet = scoreboard.getTeam("tag4baphomet");
+
+        locations = new Location[] {};
+        ConfigurationSection section = c.getConfigurationSection("chest-locations");
+
+        int counter = 0;
+        for (String key : section.getKeys(false)) {
+            int x = c.getInt("chest-locations." + key + ".x");
+            int y = c.getInt("chest-locations." + key + ".y");
+            int z = c.getInt("chest-locations." + key + ".z");
+            locations[counter] = new Location(world, x, y, z);
+            Bukkit.broadcastMessage(world.getBlockAt(locations[counter]).getType().toString());
+            counter++;
+        }
     }
 
     public static Tag4Game getInstance() {
@@ -983,19 +982,19 @@ public class Tag4Game extends Game implements Listener {
                     }
                     for (Location loc : locations) {
                         double spawnChance = random.nextDouble();
-                        if (spawnChance < 0.5) {//overall chance
+                        if (spawnChance < 2) {//overall chance
                             int spawnNo = random.nextInt(totalWeight);
                             int counter = 0;
                             for (int i = 0; i < gadgets.size(); i++) {
                                 counter += gadgetWeights.get(i);
                                 if (spawnNo < counter) {
-                                    //((Chest) (world.getBlockAt(loc).getState())).getBlockInventory().addItem(gadgets.get(i));
+                                    ((Chest) (world.getBlockAt(loc).getState())).getBlockInventory().addItem(gadgets.get(i));
                                     break;
                                 }
                             }
                         }
                     }
-                }, countDownSeconds * 20L + 400 + 600, 1200));
+                }, countDownSeconds * 20L + 400 + 6, 12));
 
                 taskIds.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                     for (Player p : devils) {
@@ -1077,7 +1076,7 @@ public class Tag4Game extends Game implements Listener {
 
     public void clearChests() {
         for (Location l : locations) {
-            //((Chest) (world.getBlockAt(l).getState())).getBlockInventory().clear();
+            ((Chest) (world.getBlockAt(l).getState())).getBlockInventory().clear();
         }
     }
 }
