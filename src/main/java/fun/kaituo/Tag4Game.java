@@ -846,6 +846,9 @@ public class Tag4Game extends Game implements Listener {
             team.setCanSeeFriendlyInvisibles(false);
             team.setAllowFriendlyFire(true);
             for (Player p : getPlayersNearHub(50, 50, 50)) {
+                if (scoreboard.getPlayerTeam(p) == null) {
+                    continue;
+                }
                 switch (scoreboard.getPlayerTeam(p).getName()) {
                     case "tag4kelti", "tag4cheshirecat", "tag4mabel", "tag4norden", "tag4redhat", "tag4alice" , "tag4bill", "tag4eunice", "tag4dodo", "tag4faketurtle", "tag4victoria", "tag4leaf"-> {
                         humans.add(p);
