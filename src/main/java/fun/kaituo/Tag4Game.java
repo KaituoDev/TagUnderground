@@ -362,6 +362,7 @@ public class Tag4Game extends Game implements Listener {
             switch (pie.getItem().getType()) {
                 case COAL -> {
                     if (tag4norden.hasPlayer(executor) || tag4victoria.hasPlayer(executor)) {
+                        executor.setHealth(executor.getMaxHealth());
                         executor.sendMessage("§c生命全部恢复！");
                         pie.getItem().setAmount(pie.getItem().getAmount() - 1);
                     } else {
