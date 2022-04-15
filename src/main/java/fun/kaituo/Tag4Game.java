@@ -415,7 +415,7 @@ public class Tag4Game extends Game implements Listener {
                 case HONEY_BOTTLE -> {
                     pie.getItem().setAmount(pie.getItem().getAmount() - 1);
                     executor.sendMessage("§e获得缓降！");
-                    executor.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 0, false, false));
+                    executor.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 40, 0, false, false));
                 }
                 case FEATHER -> {
                     pie.getItem().setAmount(pie.getItem().getAmount() - 1);
