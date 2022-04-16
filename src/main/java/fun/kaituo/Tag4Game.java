@@ -162,7 +162,8 @@ public class Tag4Game extends Game implements Listener {
         Player p = (Player) ede.getEntity();
         if (tag4cheshirecat.hasPlayer(p)) {
             if (ede.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
-                ((Player) ede.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, c.getInt("cheshirecat.speed-duration"), c.getInt("cheshirecat.speed-amplifier"), false, false));
+                Bukkit.broadcastMessage("检测到柴郡猫摔落 理应给一个加速");
+                ((Player) ede.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, c.getInt("cheshirecat.speed-duration"), c.getInt("cheshirecat.speed-amplifier"), true, false));
                 ede.setCancelled(true);
             } else if (p.getInventory().contains(Material.CLOCK, 1)) {
                 removeItem(p, Material.CLOCK);
@@ -369,11 +370,10 @@ public class Tag4Game extends Game implements Listener {
                         Player humanWhoLostMostHealth = executor;
                         double lostHealth = 0;
                         for (Player p : humans) {
-                            if (!tag4dodo.hasPlayer(p)) {
+                            if (tag4dodo.hasPlayer(p)) {
                                 continue;
                             }
                             double newLostHealth = p.getMaxHealth() - p.getHealth();
-                            Bukkit.broadcastMessage(p.getName() + "已损失生命值为" + newLostHealth);
                             if (newLostHealth >= lostHealth) {
                                 humanWhoLostMostHealth = p;
                                 lostHealth = newLostHealth;
