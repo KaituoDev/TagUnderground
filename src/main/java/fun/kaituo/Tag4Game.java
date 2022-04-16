@@ -573,7 +573,7 @@ public class Tag4Game extends Game implements Listener {
                 if (damager.getInventory().getItemInMainHand().getType().equals(Material.IRON_SWORD)) {
                     if (checkCoolDown(damager,  c.getInt("eunice.cd"))) {
                         damager.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, c.getInt("eunice.duration"), 1, false, false));
-                        damager.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,  c.getInt("eunice.duration"), 0, false, false));
+                        damager.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,  150, 1, false, false));
                         damager.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,  c.getInt("eunice.duration"), 0, false, false));
                         damager.sendMessage("§c获得加速、恢复和隐身！");
                     }
@@ -1030,6 +1030,21 @@ public class Tag4Game extends Game implements Listener {
                         }
                     }
                 }, countDownSeconds * 20L + 400 + 200, 1200));
+
+                taskIds.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+                    for (Player p : humans) {
+                        if (tag4eunice.hasPlayer(p)) {
+                            int counter = 0;
+                            for (ItemStack i : p.getInventory().all(Material.CLOCK).values()) {
+                                counter += i.getAmount();
+                            }
+                            if (counter < 1) {
+                                p.getInventory().addItem(clock);
+                                p.sendMessage("§a获得兔子的怀表！");
+                            }
+                        }
+                    }
+                }, countDownSeconds * 20L + 400 + 600, 1200));
 
 
                 taskIds.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
