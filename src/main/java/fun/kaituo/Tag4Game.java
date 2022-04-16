@@ -370,7 +370,7 @@ public class Tag4Game extends Game implements Listener {
                         Player humanWhoLostMostHealth = executor;
                         double lostHealth = 0;
                         for (Player p : humans) {
-                            if (tag4dodo.hasPlayer(p)) {
+                            if (tag4dodo.hasPlayer(p) || tag4bill.hasPlayer(p)) {
                                 continue;
                             }
                             double newLostHealth = p.getMaxHealth() - p.getHealth();
