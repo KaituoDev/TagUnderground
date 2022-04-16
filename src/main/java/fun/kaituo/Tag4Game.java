@@ -209,6 +209,7 @@ public class Tag4Game extends Game implements Listener {
             case "tag4faketurtle" -> {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 10000000, c.getInt("faketurtle.resistence-amplifier"), false, false));
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10000000,  c.getInt("faketurtle.slowness-amplifier"), false, false));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 10000000,  c.getInt("faketurtle.jump-amplifier"), false, false));
             }
         }
         p.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 999999, 0, false, false));
@@ -586,7 +587,7 @@ public class Tag4Game extends Game implements Listener {
             }
             int freezeTime = 60;
             if (tag4miranda.hasPlayer(damager)) { //米兰达
-                freezeTime = 90;
+                freezeTime = 110;
             } else if (tag4baphomet.hasPlayer(damager)) { //巴风特
                 freezeTime = 50;
             }

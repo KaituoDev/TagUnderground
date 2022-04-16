@@ -24,6 +24,7 @@ faketurtle:
   resistence-amplifier: 1
   slowness-amplifier: 1
   invisibility-duration: 100
+  jump-amplifier: 1
 leaf:
   gadget-interval: 900
 victoria:

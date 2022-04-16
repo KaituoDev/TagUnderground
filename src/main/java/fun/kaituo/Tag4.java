@@ -154,7 +154,7 @@ public class Tag4 extends JavaPlugin implements Listener {
             }
             broadcastDevilChoiceMessage(player, "海因", "§8");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "team join tag4hein " + player.getName());
-            player.sendMessage("§8海因§f： 待补充");
+            player.sendMessage("§8海因§f： 这里满溢着大量的黑之魂！太棒了！");
         } else if (x == -999 && y == 81 && z == 2027) {
             if (tag4baphomet.hasPlayer(player)) {
                 return;
