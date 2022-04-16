@@ -162,8 +162,9 @@ public class Tag4Game extends Game implements Listener {
         Player p = (Player) ede.getEntity();
         if (tag4cheshirecat.hasPlayer(p)) {
             if (ede.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
-                Bukkit.broadcastMessage("检测到柴郡猫摔落 理应给一个加速");
-                ((Player) ede.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, c.getInt("cheshirecat.speed-duration"), c.getInt("cheshirecat.speed-amplifier"), true, false));
+                Bukkit.broadcastMessage(String.valueOf(c.getInt("cheshirecat.speed-duration")));
+                Bukkit.broadcastMessage(String.valueOf(c.getInt("cheshirecat.speed-amplifier")));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, c.getInt("cheshirecat.speed-duration"), c.getInt("cheshirecat.speed-amplifier"), true, false));
                 ede.setCancelled(true);
             } else if (p.getInventory().contains(Material.CLOCK, 1)) {
                 removeItem(p, Material.CLOCK);
