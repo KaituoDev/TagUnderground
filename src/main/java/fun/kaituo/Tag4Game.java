@@ -83,6 +83,7 @@ public class Tag4Game extends Game implements Listener {
     HashMap<Player, Long> cd = new HashMap<>();
     HashMap<ArmorStand, ArmorStand> armourStandMap = new HashMap<>();
     HashMap<ArmorStand, Player> playerMap = new HashMap<>();
+    HashMap<Player, Location> freezeUsageMap = new HashMap<>();
 
     ItemStack feather = generateItemStack(Material.FEATHER, "§l§b渡渡快跑", new String[]{"可以调整移动速度", "§7模仿那只渡渡的跑法的话，应该就能以势不可挡的步伐冲刺了吧"});
     ItemStack cooked_chicken = generateItemStack(Material.COOKED_CHICKEN, "§l§b渡渡快跑", new String[]{"可以调整移动速度", "§7模仿那只渡渡的跑法的话，应该就能以势不可挡的步伐冲刺了吧"});
@@ -605,12 +606,18 @@ public class Tag4Game extends Game implements Listener {
             } else if (tag4baphomet.hasPlayer(damager)) { //巴风特
                 freezeTime = 50;
             }
+            /*
             Location l = damager.getLocation().clone();
             int id = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                 damager.teleport(l);
             }, 1, 1);
+
+             */
+            FreezeListener freezeListener = new FreezeListener(damager);
+            Bukkit.getPluginManager().registerEvents(freezeListener, plugin);
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                Bukkit.getScheduler().cancelTask(id);
+                //Bukkit.getScheduler().cancelTask(id);
+                HandlerList.unregisterAll(freezeListener);
             }, freezeTime);
             damager.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, freezeTime, 254, false, false));
         }
