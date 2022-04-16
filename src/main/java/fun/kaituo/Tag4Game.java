@@ -344,7 +344,7 @@ public class Tag4Game extends Game implements Listener {
                             }
                         }
                         for (Player p : players) {
-                            p.sendMessage("§9琳达梅尔§c发动了群体发光！");
+                            p.sendMessage("§8琳达梅尔§c发动了群体发光！");
                         }
                     }
                 }
