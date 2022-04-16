@@ -606,9 +606,8 @@ public class Tag4Game extends Game implements Listener {
                 freezeTime = 50;
             }
             Location l = damager.getLocation().clone();
-            Location newL = new Location(world, l.getX(), l.getY(), l.getZ());
             int id = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-                damager.teleport(newL);
+                damager.teleport(l);
             }, 1, 1);
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 Bukkit.getScheduler().cancelTask(id);
@@ -1015,7 +1014,7 @@ public class Tag4Game extends Game implements Listener {
                             }
                         }
                     }
-                }, countDownSeconds * 20L + 400 + 6, 12));
+                }, countDownSeconds * 20L + 400 + 600, 1200));
 
                 taskIds.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                     for (Player p : devils) {
