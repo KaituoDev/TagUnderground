@@ -57,6 +57,9 @@ public class Tag4 extends JavaPlugin implements Listener {
 
     @EventHandler
     public void displayChest(InventoryClickEvent ice) {
+        if (ice.getWhoClicked().getGameMode().equals(GameMode.CREATIVE)) {
+            return;
+        }
         if (ice.getInventory().getHolder() instanceof Chest) {
             Location location = ((Chest) ice.getInventory().getHolder()).getBlock().getLocation();
             long x = location.getBlockX(); long y = location.getBlockY(); long z = location.getBlockZ();
