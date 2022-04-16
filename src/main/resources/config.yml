@@ -12,9 +12,7 @@ chechirecat:
 kelti:
   invisibility-duration: 100
 bill:
-  radiusX: 5
-  radiusY: 5
-  radiusZ: 5
+  cd: 3600
 eunice:
   duration: 100
   cd: 1200

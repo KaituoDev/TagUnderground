@@ -364,6 +364,41 @@ public class Tag4Game extends Game implements Listener {
             //这里开始添加内容
 
             switch (pie.getItem().getType()) {
+                case MUSHROOM_STEW -> {
+                    if (checkCoolDown(executor, c.getInt("bill.cd"))) {
+                        Player humanWhoLostMostHealth = executor;
+                        double lostHealth = 0;
+                        for (Player p : humans) {
+                            double newLostHealth = p.getMaxHealth() - p.getHealth();
+                            if (newLostHealth >= lostHealth) {
+                                humanWhoLostMostHealth = p;
+                                lostHealth = newLostHealth;
+                            }
+                        }
+                        if (lostHealth == 0) {
+                            clearCoolDown(executor);
+                            executor.sendMessage("§c己方玩家全部满血！技能未生效！");
+                        } else {
+                            humanWhoLostMostHealth.setHealth(humanWhoLostMostHealth.getMaxHealth());
+                            executor.sendMessage("§a为 §f" + humanWhoLostMostHealth.getName() + " §a恢复全部生命值！");
+                            humanWhoLostMostHealth.sendMessage("§2" + executor.getName() + " §f为你恢复了全部生命值！");
+                        }
+
+                    }
+                    executor.sendMessage("§a为身边己方角色恢复全部生命值！");
+                    for (Entity e : executor.getNearbyEntities(c.getInt("bill.radiusX"),c.getInt("bill.radiusY"),c.getInt("bill.radiusZ"))) {
+                        if (humans.contains(e)) {
+                            if ((!tag4bill.hasPlayer(executor)) && !(tag4dodo.hasPlayer(executor))) {
+                                ((Player)e).setHealth(((Player)e).getMaxHealth());;
+                            }else {
+                                executor.sendMessage("§c你无法通过这种方式恢复生命值！");
+                            }
+                        }
+                    }
+                }
+
+
+
                 case COAL -> {
                     if (tag4norden.hasPlayer(executor) || tag4victoria.hasPlayer(executor)) {
                         executor.setHealth(executor.getMaxHealth());
@@ -434,19 +469,6 @@ public class Tag4Game extends Game implements Listener {
                     pie.getItem().setAmount(pie.getItem().getAmount() - 1);
                     executor.sendMessage("§b获得加速！");
                     executor.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 1, false, false));
-                }
-                case MUSHROOM_STEW -> {
-                    pie.getItem().setAmount(pie.getItem().getAmount() - 1);
-                    executor.sendMessage("§a为身边己方角色恢复全部生命值！");
-                    for (Entity e : executor.getNearbyEntities(c.getInt("bill.radiusX"),c.getInt("bill.radiusY"),c.getInt("bill.radiusZ"))) {
-                        if (humans.contains(e)) {
-                            if ((!tag4bill.hasPlayer(executor)) && !(tag4dodo.hasPlayer(executor))) {
-                                ((Player)e).setHealth(((Player)e).getMaxHealth());;
-                            }else {
-                                executor.sendMessage("§c你无法通过这种方式恢复生命值！");
-                            }
-                        }
-                    }
                 }
                 case BEETROOT_SOUP -> {
                     pie.getItem().setAmount(pie.getItem().getAmount() - 1);
