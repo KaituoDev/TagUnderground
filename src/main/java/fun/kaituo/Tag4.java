@@ -3,6 +3,8 @@ package fun.kaituo;
 
 import fun.kaituo.event.PlayerChangeGameEvent;
 import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.type.TrapDoor;
 import org.bukkit.entity.Player;
@@ -10,6 +12,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,6 +55,18 @@ public class Tag4 extends JavaPlugin implements Listener {
         return Tag4Game.getInstance();
     }
 
+    @EventHandler
+    public void displayChest(InventoryClickEvent ice) {
+        if (ice.getInventory().getHolder() instanceof Chest) {
+            Location location = ((Chest) ice.getInventory().getHolder()).getBlock().getLocation();
+            long x = location.getBlockX(); long y = location.getBlockY(); long z = location.getBlockZ();
+            if (x == -1016 && y == 81 && z == 2020) {
+                ice.setCancelled(true);
+            } else if (x == -1016 && y == 81 && z == 2016) {
+                ice.setCancelled(true);
+            }
+        }
+    }
     @EventHandler
     public void preventClickingTrapDoor(PlayerInteractEvent pie) {
         if (!pie.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
