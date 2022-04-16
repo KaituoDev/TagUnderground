@@ -606,18 +606,12 @@ public class Tag4Game extends Game implements Listener {
             } else if (tag4baphomet.hasPlayer(damager)) { //巴风特
                 freezeTime = 50;
             }
-            /*
             Location l = damager.getLocation().clone();
             int id = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                 damager.teleport(l);
             }, 1, 1);
-
-             */
-            FreezeListener freezeListener = new FreezeListener(damager);
-            Bukkit.getPluginManager().registerEvents(freezeListener, plugin);
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                //Bukkit.getScheduler().cancelTask(id);
-                HandlerList.unregisterAll(freezeListener);
+                Bukkit.getScheduler().cancelTask(id);
             }, freezeTime);
             damager.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, freezeTime, 254, false, false));
         }
