@@ -373,6 +373,7 @@ public class Tag4Game extends Game implements Listener {
                                 continue;
                             }
                             double newLostHealth = p.getMaxHealth() - p.getHealth();
+                            Bukkit.broadcastMessage(p.getName() + "已损失生命值为" + newLostHealth);
                             if (newLostHealth >= lostHealth) {
                                 humanWhoLostMostHealth = p;
                                 lostHealth = newLostHealth;
