@@ -369,6 +369,9 @@ public class Tag4Game extends Game implements Listener {
                         Player humanWhoLostMostHealth = executor;
                         double lostHealth = 0;
                         for (Player p : humans) {
+                            if (!tag4dodo.hasPlayer(p)) {
+                                continue;
+                            }
                             double newLostHealth = p.getMaxHealth() - p.getHealth();
                             if (newLostHealth >= lostHealth) {
                                 humanWhoLostMostHealth = p;
@@ -377,22 +380,11 @@ public class Tag4Game extends Game implements Listener {
                         }
                         if (lostHealth == 0) {
                             clearCoolDown(executor);
-                            executor.sendMessage("§c己方玩家全部满血！技能未生效！");
+                            executor.sendMessage("§c己方可选目标玩家全部满血！技能未生效！");
                         } else {
                             humanWhoLostMostHealth.setHealth(humanWhoLostMostHealth.getMaxHealth());
                             executor.sendMessage("§a为 §f" + humanWhoLostMostHealth.getName() + " §a恢复全部生命值！");
                             humanWhoLostMostHealth.sendMessage("§2" + executor.getName() + " §f为你恢复了全部生命值！");
-                        }
-
-                    }
-                    executor.sendMessage("§a为身边己方角色恢复全部生命值！");
-                    for (Entity e : executor.getNearbyEntities(c.getInt("bill.radiusX"),c.getInt("bill.radiusY"),c.getInt("bill.radiusZ"))) {
-                        if (humans.contains(e)) {
-                            if ((!tag4bill.hasPlayer(executor)) && !(tag4dodo.hasPlayer(executor))) {
-                                ((Player)e).setHealth(((Player)e).getMaxHealth());;
-                            }else {
-                                executor.sendMessage("§c你无法通过这种方式恢复生命值！");
-                            }
                         }
                     }
                 }
