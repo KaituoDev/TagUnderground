@@ -211,7 +211,6 @@ public class Tag4Game extends Game implements Listener {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10000000, 0, false, false));
             }
             case "tag4faketurtle" -> {
-                Bukkit.broadcastMessage(String.valueOf(c.getInt("faketurtle.resistance-amplifier")));
                 p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 10000000, c.getInt("faketurtle.resistance-amplifier"), false, false));
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10000000,  c.getInt("faketurtle.slowness-amplifier"), false, false));
                 p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 10000000,  c.getInt("faketurtle.jump-amplifier"), false, false));
