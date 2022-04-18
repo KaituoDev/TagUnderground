@@ -373,7 +373,7 @@ public class Tag4Game extends Game implements Listener {
                         Player humanWhoLostMostHealth = executor;
                         double lostHealth = 0;
                         for (Player p : humans) {
-                            if (tag4dodo.hasPlayer(p) || tag4bill.hasPlayer(p)) {
+                            if (tag4dodo.hasPlayer(p) || tag4bill.hasPlayer(p) || tag4faketurtle.hasPlayer(p)) {
                                 continue;
                             }
                             double newLostHealth = p.getMaxHealth() - p.getHealth();
@@ -750,11 +750,6 @@ public class Tag4Game extends Game implements Listener {
         if (!((Player) erhe.getEntity()).getGameMode().equals(GameMode.ADVENTURE)) {
             return;
         }
-        if (tag4bill.hasPlayer((Player) erhe.getEntity())) {
-            erhe.setCancelled(true);
-        } else if (tag4dodo.hasPlayer((Player) erhe.getEntity())) {
-            erhe.setCancelled(true);
-        }
         if (erhe.getRegainReason().equals(EntityRegainHealthEvent.RegainReason.SATIATED)) {
             erhe.setCancelled(true);
         } else if (erhe.getRegainReason().equals(EntityRegainHealthEvent.RegainReason.EATING)) {
@@ -1027,7 +1022,7 @@ public class Tag4Game extends Game implements Listener {
                             for (ItemStack i : p.getInventory().all(Material.ENDER_PEARL).values()) {
                                 counter += i.getAmount();
                             }
-                            if (counter < 3) {
+                            if (counter < 1) {
                                 p.getInventory().addItem(new ItemStack(Material.ENDER_PEARL));
                                 p.sendMessage("§a获得末影珍珠！");
                             }
