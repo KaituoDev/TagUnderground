@@ -19,7 +19,7 @@ eunice:
 dodo:
   speed-duration: 60
 faketurtle:
-  resistence-amplifier: 1
+  resistance-amplifier: 1
   slowness-amplifier: 1
   invisibility-duration: 100
   jump-amplifier: 1
