@@ -192,6 +192,12 @@ public class Tag4Game extends Game implements Listener {
 
     private void initializePlayer(Player p) {
         switch (scoreboard.getPlayerTeam(p).getName()) {
+            case "tag4hein" -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 10000000, 1, false, false));
+            }
+            case "tag4miranda", "tag4baphomet", "tag4lindamayer" -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 10000000, 0, false, false));
+            }
             case "tag4norden" -> {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 10000000, 4, true, false));
             }
@@ -200,9 +206,6 @@ public class Tag4Game extends Game implements Listener {
             }
             case "tag4redhat" -> {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 10000000, c.getInt("redhat.resistance-amplifier"), false, false));
-            }
-            case "tag4hein" -> {
-                p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 10000000, 1, false, false));
             }
             case "tag4dodo" -> {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10000000, 0, false, false));
