@@ -430,6 +430,7 @@ public class Tag4Game extends Game implements Listener {
                     } else {
                         executor.setHealth(executor.getHealth() - 10);
                     }
+                    executor.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 10000000, 0, true, false));
                     executor.sendMessage("§a减少一半当前生命值，赋予全场友方角色隐身！");
                     for (Player p : humans) {
                         p.sendMessage("§a被§9克缇§a给予隐身效果！");
@@ -738,52 +739,13 @@ public class Tag4Game extends Game implements Listener {
                 for (Player p : players) {
                     p.sendMessage("§f" + pde.getEntity().getName() + " §c 被逐出了箱庭！");
                 }
+                return;
             } else if (tag4kelti.hasPlayer(pde.getEntity())) {
-
-                Location l = pde.getEntity().getLocation().clone();
-
-                ArmorStand ice = (ArmorStand) world.spawnEntity(l, EntityType.ARMOR_STAND);
-                ice.setBasePlate(false);
-                ice.setInvisible(true);
-                ice.setVelocity(new Vector(0, -50, 0));
-
-                l.setY(0);
-
-                ArmorStand head = (ArmorStand) world.spawnEntity(l, EntityType.ARMOR_STAND);
-                ItemStack headItem = new ItemStack(Material.PLAYER_HEAD);
-                SkullMeta skullMeta = (SkullMeta) headItem.getItemMeta();
-                skullMeta.setOwningPlayer(pde.getEntity());
-                headItem.setItemMeta(skullMeta);
-                head.setBasePlate(false);
-                head.setSmall(true);
-                head.getEquipment().setHelmet(headItem);
-                head.setGravity(false);
-                head.setCustomName(pde.getEntity().getName());
-                head.setCustomNameVisible(true);
-                head.setInvisible(true);
-                EulerAngle angle = new EulerAngle(Math.PI, 0, 0);
-                head.setLeftLegPose(angle);
-                head.setRightLegPose(angle);
-
-                armourStandMap.put(ice, head);
-
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    ice.setGravity(false);
-                    Location iceLocation = ice.getLocation().clone();
-                    iceLocation.setY(iceLocation.getY() - 1.4);
-                    ice.teleport(iceLocation);
-                    iceLocation.setY(iceLocation.getY() + 0.75);
-                    head.teleport(iceLocation);
-                }, 5);
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    ice.getEquipment().setHelmet(new ItemStack(Material.BROWN_STAINED_GLASS));
-                    head.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 10000000, 0));
-                }, 6);
                 for (Player p : players) {
                     p.sendMessage("§f" + pde.getEntity().getName() + " §c 被逐出了箱庭！");
                 }
+                return;
             }
-            return;
         } else if (pde.getEntity().getKiller() != null) {
             if (tag4baphomet.hasPlayer(pde.getEntity().getKiller())) {
                 for (Player p : players) {
