@@ -226,6 +226,9 @@ public class Tag4Game extends Game implements Listener {
         if ((armourStandMap.get(s) == null)) {
             return;
         }
+        if (!playerMap.containsKey(s)) {
+            return;
+        }
         Player p = playerMap.get(s);
         if (!(players.contains(p) && !humans.contains(p))) {
             return;
@@ -400,7 +403,7 @@ public class Tag4Game extends Game implements Listener {
 
                 case BOOK -> {
                     ArmorStand target = null;
-                    for (Entity e : world.getNearbyEntities(executor.getLocation(), 200,200,200, e ->  armourStandMap.containsKey(e))) {
+                    for (Entity e : world.getNearbyEntities(executor.getLocation(), 200,200,200, e ->  playerMap.containsKey(e))) {
                         if (target == null) {
                             target = (ArmorStand) e;
                         } else {
@@ -759,6 +762,8 @@ public class Tag4Game extends Game implements Listener {
                 EulerAngle angle = new EulerAngle(Math.PI, 0, 0);
                 head.setLeftLegPose(angle);
                 head.setRightLegPose(angle);
+
+                armourStandMap.put(ice, head);
 
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     ice.setGravity(false);
