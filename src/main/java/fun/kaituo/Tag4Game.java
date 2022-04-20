@@ -729,8 +729,52 @@ public class Tag4Game extends Game implements Listener {
             return;
         }
         if (pde.getEntity().getInventory().contains(Material.ENCHANTED_BOOK, 1)) {
-            for (Player p : players) {
-                p.sendMessage("§f" + pde.getEntity().getName() + " §c 被逐出了箱庭！");
+            if (tag4alice.hasPlayer(pde.getEntity())) {
+                for (Player p : players) {
+                    p.sendMessage("§f" + pde.getEntity().getName() + " §c 被逐出了箱庭！");
+                }
+            } else if (tag4kelti.hasPlayer(pde.getEntity())) {
+
+                Location l = pde.getEntity().getLocation().clone();
+
+                ArmorStand ice = (ArmorStand) world.spawnEntity(l, EntityType.ARMOR_STAND);
+                ice.setBasePlate(false);
+                ice.setInvisible(true);
+                ice.setVelocity(new Vector(0, -50, 0));
+
+                l.setY(0);
+
+                ArmorStand head = (ArmorStand) world.spawnEntity(l, EntityType.ARMOR_STAND);
+                ItemStack headItem = new ItemStack(Material.PLAYER_HEAD);
+                SkullMeta skullMeta = (SkullMeta) headItem.getItemMeta();
+                skullMeta.setOwningPlayer(pde.getEntity());
+                headItem.setItemMeta(skullMeta);
+                head.setBasePlate(false);
+                head.setSmall(true);
+                head.getEquipment().setHelmet(headItem);
+                head.setGravity(false);
+                head.setCustomName(pde.getEntity().getName());
+                head.setCustomNameVisible(true);
+                head.setInvisible(true);
+                EulerAngle angle = new EulerAngle(Math.PI, 0, 0);
+                head.setLeftLegPose(angle);
+                head.setRightLegPose(angle);
+
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    ice.setGravity(false);
+                    Location iceLocation = ice.getLocation().clone();
+                    iceLocation.setY(iceLocation.getY() - 1.4);
+                    ice.teleport(iceLocation);
+                    iceLocation.setY(iceLocation.getY() + 0.75);
+                    head.teleport(iceLocation);
+                }, 5);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    ice.getEquipment().setHelmet(new ItemStack(Material.BROWN_STAINED_GLASS));
+                    head.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 594, 0));
+                }, 6);
+                for (Player p : players) {
+                    p.sendMessage("§f" + pde.getEntity().getName() + " §c 被逐出了箱庭！");
+                }
             }
             return;
         } else if (pde.getEntity().getKiller() != null) {
@@ -1073,7 +1117,7 @@ public class Tag4Game extends Game implements Listener {
                             }
                         }
                     }
-                }, countDownSeconds * 20L + 400 + 6, 12));
+                }, countDownSeconds * 20L + 400 + 600, 1200));
 
                 taskIds.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                     for (Player p : devils) {

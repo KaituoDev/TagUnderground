@@ -6,6 +6,8 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.type.Fence;
+import org.bukkit.block.data.type.Gate;
 import org.bukkit.block.data.type.TrapDoor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -75,7 +77,7 @@ public class Tag4 extends JavaPlugin implements Listener {
         if (!pie.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             return;
         }
-        if (!(pie.getClickedBlock().getBlockData() instanceof TrapDoor)) {
+        if (!(pie.getClickedBlock().getBlockData() instanceof TrapDoor) && !(pie.getClickedBlock().getBlockData() instanceof Gate)) {
             return;
         }
         if (!pie.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
