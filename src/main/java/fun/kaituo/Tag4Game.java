@@ -97,8 +97,8 @@ public class Tag4Game extends Game implements Listener {
     ItemStack enchanted_book = generateItemStack(Material.ENCHANTED_BOOK, "§l§8§k爱丽丝·里德尔的誓约", new String[]{"持有者速度永久增加，但无法被复活", "§7§m我将永远爱着你"});
     ItemStack experience_bottle = generateItemStack(Material.EXPERIENCE_BOTTLE, "§l§d梦之魂", new String[] {"获得少量的护盾生命值", "以及隐身效果","§7即使你已忘却，","§7少女的梦幻故事也永远不会完结"});
     ItemStack amethyst_shard = generateItemStack(Material.AMETHYST_SHARD, "§l§8脏液", new String[] {"缓慢回复一定生命值","但同时会获得反胃","§7狂信的患者为了证明医学的正确性，而自行患上疾病"});
-    ItemStack ghast_tear = generateItemStack(Material.GHAST_TEAR, "§l§1克缇的泪花", new String[]{"减少一半当前生命值","赋予全场友方角色隐身","(使用后转变为童话绘本)","§7克缇...是坏孩子吗?...","§7不要抛下克缇好吗......"});
-    ItemStack enchanted_book2 = generateItemStack(Material.ENCHANTED_BOOK, "§l§1童话绘本", new String[]{"持有者死亡时无法被复活","且永久发光","减少最大生命值上限","§赋予全场友方角色短暂的加速和免伤","§7克缇遗落的绘本","§7某一天，","§7人鱼公主爱上出现在海边的王子。","§7那绝对无法得到回报的恋爱不断膨胀，令海啸袭击王子的国家"});
+    ItemStack ghast_tear = generateItemStack(Material.GHAST_TEAR, "§l§9克缇的泪花", new String[]{"减少一半当前生命值","赋予全场友方角色隐身","(使用后转变为童话绘本)","§7克缇...是坏孩子吗?...","§7不要抛下克缇好吗......"});
+    ItemStack enchanted_book2 = generateItemStack(Material.ENCHANTED_BOOK, "§l§9童话绘本", new String[]{"持有者死亡时无法被复活","且永久发光","减少最大生命值上限","§赋予全场友方角色短暂的加速和免伤","§7克缇遗落的绘本","§7某一天，","§7人鱼公主爱上出现在海边的王子。","§7那绝对无法得到回报的恋爱不断膨胀，令海啸袭击王子的国家"});
 
     List<ItemStack> gadgets = Arrays.asList(feather, glass_bottle, nether_star, clock, potion, honey_bottle, coal, dragon_breath,experience_bottle,amethyst_shard);
     List<Integer> gadgetWeights = Arrays.asList(10, 5, 1, 10, 1, 10, 5, 10, 5, 10);
@@ -432,6 +432,7 @@ public class Tag4Game extends Game implements Listener {
                     }
                     executor.sendMessage("§a减少一半当前生命值，赋予全场友方角色隐身！");
                     for (Player p : humans) {
+                        p.sendMessage("§a被§9克缇§a给予隐身效果！");
                         p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100, 0, false, false));
                     }
                 }
@@ -446,8 +447,9 @@ public class Tag4Game extends Game implements Listener {
                                 executor.setMaxHealth(executor.getMaxHealth() - 3);
                             }
                             for (Player p : humans) {
-                                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 0, false, false));
-                                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 0, false, false));
+                                p.sendMessage("§a被§9克缇§a给予加速和免伤效果！");
+                                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 0, false, false));
+                                p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 60, 3, false, false));
                             }
                         }
                     }
