@@ -80,10 +80,10 @@ public class Tag4Game extends Game implements Listener {
     FileConfiguration c;
 
 
-    HashMap<Player, Long> cd = new HashMap<>();
+    HashMap<Player, Long> cd1 = new HashMap<>();
+    HashMap<Player, Long> cd2 = new HashMap<>();
     HashMap<ArmorStand, ArmorStand> armourStandMap = new HashMap<>();
     HashMap<ArmorStand, Player> playerMap = new HashMap<>();
-    HashMap<Player, Location> freezeUsageMap = new HashMap<>();
 
     ItemStack feather = generateItemStack(Material.FEATHER, "§l§b渡渡快跑", new String[]{"可以调整移动速度", "§7模仿那只渡渡的跑法的话，应该就能以势不可挡的步伐冲刺了吧"});
     ItemStack cooked_chicken = generateItemStack(Material.COOKED_CHICKEN, "§l§b渡渡快跑", new String[]{"可以调整移动速度", "§7模仿那只渡渡的跑法的话，应该就能以势不可挡的步伐冲刺了吧"});
@@ -95,10 +95,13 @@ public class Tag4Game extends Game implements Listener {
     ItemStack dragon_breath = generateItemStack(Material.DRAGON_BREATH, "§l§d心跳悦动酒", new String[]{"瞬间恢复一定生命值，但会获得两倍回复量的发光时间", "§7梅贝尔最爱喝的酒！"});
     ItemStack honey_bottle = generateItemStack(Material.HONEY_BOTTLE, "§l§6黄金蜂蜜酒", new String[]{"获得短时间的缓降效果", "§7带翼的贵妇人相当喜欢这个蜂蜜酒"});
     ItemStack enchanted_book = generateItemStack(Material.ENCHANTED_BOOK, "§l§8§k爱丽丝·里德尔的誓约", new String[]{"持有者速度永久增加，但无法被复活", "§7§m我将永远爱着你"});
+    ItemStack experience_bottle = generateItemStack(Material.EXPERIENCE_BOTTLE, "§l§d梦之魂", new String[] {"获得少量的护盾生命值", "以及隐身效果","§7即使你已忘却，","§7少女的梦幻故事也永远不会完结"});
+    ItemStack amethyst_shard = generateItemStack(Material.AMETHYST_SHARD, "§l§8脏液", new String[] {"缓慢回复一定生命值","但同时会获得反胃","§7狂信的患者为了证明医学的正确性，而自行患上疾病"});
+    ItemStack ghast_tear = generateItemStack(Material.GHAST_TEAR, "§l§1克缇的泪花", new String[]{"减少一半当前生命值","赋予全场友方角色隐身","(使用后转变为童话绘本)","§7克缇...是坏孩子吗?...","§7不要抛下克缇好吗......"});
+    ItemStack enchanted_book2 = generateItemStack(Material.ENCHANTED_BOOK, "§l§1童话绘本", new String[]{"持有者死亡时无法被复活","且永久发光","减少最大生命值上限","§赋予全场友方角色短暂的加速和免伤","§7克缇遗落的绘本","§7某一天，","§7人鱼公主爱上出现在海边的王子。","§7那绝对无法得到回报的恋爱不断膨胀，令海啸袭击王子的国家"});
 
-
-    List<ItemStack> gadgets = Arrays.asList(feather, glass_bottle, nether_star, clock, potion, honey_bottle, coal, dragon_breath);
-    List<Integer> gadgetWeights = Arrays.asList(10, 5, 1, 10, 1, 10, 5, 10);
+    List<ItemStack> gadgets = Arrays.asList(feather, glass_bottle, nether_star, clock, potion, honey_bottle, coal, dragon_breath,experience_bottle,amethyst_shard);
+    List<Integer> gadgetWeights = Arrays.asList(10, 5, 1, 10, 1, 10, 5, 10, 5, 10);
 
     int totalWeight;
 
@@ -177,7 +180,7 @@ public class Tag4Game extends Game implements Listener {
 
         //以下是自带天赋
         if (tag4kelti.hasPlayer(p)) {
-            if (checkCoolDown(p, 60)) {
+            if (checkCoolDown(p, 60, cd1)) {
                 p.sendMessage("§b获得暂时隐身！");
                 p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, c.getInt("kelti.invisibility-duration"), 0, false, false));
             }
@@ -219,8 +222,7 @@ public class Tag4Game extends Game implements Listener {
         p.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 999999, 0, false, false));
     }
 
-    private void revivePlayer(PlayerInteractAtEntityEvent piaee) {
-        ArmorStand s = (ArmorStand) piaee.getRightClicked();
+    private void revivePlayer(ArmorStand s) {
         if ((armourStandMap.get(s) == null)) {
             return;
         }
@@ -258,14 +260,8 @@ public class Tag4Game extends Game implements Listener {
         }
 
         ItemStack item = piaee.getPlayer().getInventory().getItemInMainHand();
-        if (item.getType().equals(Material.BOOK)) {
-            revivePlayer(piaee);
-            item.setAmount(item.getAmount() - 1);
-            piaee.getPlayer().getInventory().addItem(enchanted_book);
-            piaee.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10000000, 0));
-
-        } else if (item.getType().equals(Material.NETHER_STAR)) {
-            revivePlayer(piaee);
+        if (item.getType().equals(Material.NETHER_STAR)) {
+            revivePlayer((ArmorStand) piaee.getRightClicked());
             item.setAmount(item.getAmount() - 1);
         }
     }
@@ -290,7 +286,7 @@ public class Tag4Game extends Game implements Listener {
             pie.setCancelled(true);
             if (((Chest) (block.getState())).getBlockInventory().isEmpty()) {
                 executor.sendMessage("§c这个箱子是空的！");
-            } else if (checkCoolDown(executor, 600)) {
+            } else if (checkCoolDown(executor, 600, cd1)) {
                 ((Chest) (block.getState())).getBlockInventory().clear();
                 executor.sendMessage("§a成功破坏箱子内的所有道具！");
             }
@@ -335,7 +331,7 @@ public class Tag4Game extends Game implements Listener {
 
             switch (pie.getItem().getType()) {
                 case NETHERITE_SWORD -> {
-                    if (checkCoolDown(executor, 3600)) {
+                    if (checkCoolDown(executor, 3600, cd1)) {
                         for (Player p: humans) {
                             p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 200, 0, true, false));
                         }
@@ -369,7 +365,7 @@ public class Tag4Game extends Game implements Listener {
 
             switch (pie.getItem().getType()) {
                 case MUSHROOM_STEW -> {
-                    if (checkCoolDown(executor, c.getInt("bill.cd"))) {
+                    if (checkCoolDown(executor, c.getInt("bill.cd"), cd1)) {
                         Player humanWhoLostMostHealth = executor;
                         double lostHealth = 0;
                         for (Player p : humans) {
@@ -389,6 +385,67 @@ public class Tag4Game extends Game implements Listener {
                             humanWhoLostMostHealth.setHealth(humanWhoLostMostHealth.getMaxHealth());
                             executor.sendMessage("§a为 §f" + humanWhoLostMostHealth.getName() + " §a恢复全部生命值！");
                             humanWhoLostMostHealth.sendMessage("§2" + executor.getName() + " §f为你恢复了全部生命值！");
+                        }
+                    }
+                }
+                case ENDER_EYE -> {
+                    if (checkCoolDown(executor, c.getInt("mabel.active-blindness-cd"), cd1)) {
+                        executor.sendMessage("§a给予所有鬼失明效果！");
+                        for (Player p : devils) {
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, c.getInt("mabel.active-blindness-duration"), 0));
+                            p.sendMessage("§c被梅贝尔给予失明效果！");
+                        }
+                    }
+                }
+
+                case BOOK -> {
+                    ArmorStand target = null;
+                    for (Entity e : world.getNearbyEntities(executor.getLocation(), 200,200,200, e ->  armourStandMap.containsKey(e))) {
+                        if (target == null) {
+                            target = (ArmorStand) e;
+                        } else {
+                            if (executor.getLocation().distance(e.getLocation()) < executor.getLocation().distance(target.getLocation())) {
+                                target = (ArmorStand) e;
+                            }
+                        }
+                    }
+                    if (target == null) {
+                        executor.sendMessage("§c没有可以复活的友方角色！");
+                    } else {
+                        revivePlayer(target);
+                        pie.getItem().setAmount(pie.getItem().getAmount() - 1);
+                        executor.getInventory().addItem(enchanted_book);
+                        executor.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10000000, 0));
+                    }
+                }
+
+                case GHAST_TEAR -> {
+                    pie.getItem().setAmount(pie.getItem().getAmount() - 1);
+                    executor.getInventory().addItem(enchanted_book2);
+                    if (executor.getHealth() <= 10) {
+                        executor.setHealth(1);
+                    } else {
+                        executor.setHealth(executor.getHealth() - 10);
+                    }
+                    executor.sendMessage("§a减少一半当前生命值，赋予全场友方角色隐身！");
+                    for (Player p : humans) {
+                        p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100, 0, false, false));
+                    }
+                }
+
+                case ENCHANTED_BOOK -> {
+                    if (tag4kelti.hasPlayer(executor)) {
+                        if (checkCoolDown(executor, 1200, cd2)) {
+                            executor.sendMessage("§a减少生命值上限，赋予全场友方角色加速和免伤！");
+                            if (executor.getMaxHealth() <= 3) {
+                                executor.setHealth(0);
+                            } else {
+                                executor.setMaxHealth(executor.getMaxHealth() - 3);
+                            }
+                            for (Player p : humans) {
+                                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 0, false, false));
+                                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 0, false, false));
+                            }
                         }
                     }
                 }
@@ -478,6 +535,19 @@ public class Tag4Game extends Game implements Listener {
                         executor.setHealth(executor.getMaxHealth());
                     }
                 }
+                case EXPERIENCE_BOTTLE -> {
+                    pie.getItem().setAmount(pie.getItem().getAmount() - 1);
+                    pie.setCancelled(true);
+                    executor.sendMessage("§a获得护盾生命值和隐身效果！");
+                    executor.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100, 0, false, false));
+                    executor.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 10000000, 1, false, false));
+                }
+                case AMETHYST_SHARD -> {
+                    pie.getItem().setAmount(pie.getItem().getAmount() - 1);
+                    executor.sendMessage("§a获得生命恢复和§c反胃效果！");
+                    executor.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,  150, 1, false, false));
+                    executor.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,  300, 0, true, false));
+                }
             }
         }
     }
@@ -528,22 +598,22 @@ public class Tag4Game extends Game implements Listener {
     }
 
     public void clearCoolDown(Player p) {
-        if (cd.get(p) != null) {
-            cd.remove(p);
+        if (cd1.get(p) != null) {
+            cd1.remove(p);
         }
     }
 
-    public boolean checkCoolDown(Player p, long coolDown) {
-        if (cd.get(p) == null) {
-            cd.put(p, getTime(world));
+    public boolean checkCoolDown(Player p, long coolDown, HashMap<Player, Long> coolDownMap) {
+        if (coolDownMap.get(p) == null) {
+            coolDownMap.put(p, getTime(world));
             return true;
         } else {
-            long timeLapsed = getTime(world) - cd.get(p);
+            long timeLapsed = getTime(world) - coolDownMap.get(p);
             if (timeLapsed < coolDown) {
                 p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§c§l技能冷却中！ 还剩 §6§l" + (int) ((coolDown - timeLapsed) / 20) + " §c§l秒"));
                 return false;
             } else {
-                cd.put(p, getTime(world));
+                coolDownMap.put(p, getTime(world));
                 return true;
             }
         }
@@ -575,7 +645,7 @@ public class Tag4Game extends Game implements Listener {
         if (humans.contains(damager) && devils.contains(victim)) {
             if (tag4eunice.hasPlayer(damager)) {
                 if (damager.getInventory().getItemInMainHand().getType().equals(Material.IRON_SWORD)) {
-                    if (checkCoolDown(damager,  c.getInt("eunice.cd"))) {
+                    if (checkCoolDown(damager,  c.getInt("eunice.cd"), cd1)) {
                         damager.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, c.getInt("eunice.duration"), 1, false, false));
                         damager.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,  150, 1, false, false));
                         damager.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,  c.getInt("eunice.duration"), 0, false, false));
@@ -601,7 +671,7 @@ public class Tag4Game extends Game implements Listener {
                 }
             }
             if (tag4mabel.hasPlayer(victim)) {
-                damager.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, c.getInt("mabel.blindness-duration"), 0));
+                damager.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, c.getInt("mabel.passive-blindness-duration"), 0));
             }
             int freezeTime = 60;
             if (tag4miranda.hasPlayer(damager)) { //米兰达
@@ -907,7 +977,10 @@ public class Tag4Game extends Game implements Listener {
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     Bukkit.getPluginManager().registerEvents(this, plugin);
                     for (Player p : humans) {
-                        p.teleport(new Location(world, -1003.0, 85, 2002.0));
+                        p.teleport(new Location(world, -1003.0,108,2014.0, 180, 0));
+                    }
+                    for (Player p : devils) {
+                        p.teleport(new Location(world, -1002.5,103,2007.0, 180, 0));
                     }
                     for (Player p : players) {
                         initializePlayer(p);
@@ -928,7 +1001,7 @@ public class Tag4Game extends Game implements Listener {
                     placeSpectateButton();
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "function tag4:go");
                     for (Player p : devils) {
-                        p.teleport(new Location(world, -1003.0, 85, 2002.0));
+                        p.teleport(new Location(world, -1003.0,108,2014.0, 180, 0));
                         p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 999999, 4, false, false));
                         p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 0, false, false));
                         ItemStack skull = new ItemStackBuilder(Material.WITHER_SKELETON_SKULL).addEnchantment(Enchantment.BINDING_CURSE, 1).build();
@@ -944,7 +1017,9 @@ public class Tag4Game extends Game implements Listener {
                         if (tag4leaf.hasPlayer(p)) {
                             p.getInventory().addItem(coal);
                         } else if (tag4lindamayer.hasPlayer(p)) {
-                            cd.put(p, getTime(world) - 3000);
+                            cd1.put(p, getTime(world) - 3000);
+                        } else if (tag4kelti.hasPlayer(p)) {
+                            p.getInventory().addItem(ghast_tear);
                         }
                         p.setHealth(20);
                         p.sendTitle("§e游戏开始！", null, 2, 16, 2);
@@ -953,21 +1028,6 @@ public class Tag4Game extends Game implements Listener {
 
                 }, countDownSeconds * 20L + 400);
 
-                taskIds.add(
-                        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-                            for (Player p : humans) {
-                                if (p.getInventory().contains(Material.ENDER_EYE)) {
-                                    for (Player victim : players) {
-                                        victim.sendMessage("§7梅贝尔§f在场，所有鬼发光5秒！");
-                                        if (devils.contains(victim)) {
-                                            victim.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, c.getInt("mabel.glowing-duration"), 0, false, false));
-                                        }
-                                    }
-                                    return;
-                                }
-
-                            }
-                        }, countDownSeconds * 20L + 400 + c.getInt("mabel.glowing-interval"), c.getInt("mabel.glowing-interval")));
 
                 taskIds.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                     for (Player p : players) {
