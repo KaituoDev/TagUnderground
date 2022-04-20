@@ -1073,7 +1073,7 @@ public class Tag4Game extends Game implements Listener {
                             }
                         }
                     }
-                }, countDownSeconds * 20L + 400 + 600, 1200));
+                }, countDownSeconds * 20L + 400 + 6, 12));
 
                 taskIds.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                     for (Player p : devils) {
