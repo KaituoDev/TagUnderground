@@ -777,7 +777,7 @@ public class Tag4Game extends Game implements Listener {
                 }, 5);
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     ice.getEquipment().setHelmet(new ItemStack(Material.BROWN_STAINED_GLASS));
-                    head.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 594, 0));
+                    head.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 10000000, 0));
                 }, 6);
                 for (Player p : players) {
                     p.sendMessage("§f" + pde.getEntity().getName() + " §c 被逐出了箱庭！");
