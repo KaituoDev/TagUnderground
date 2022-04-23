@@ -98,6 +98,10 @@ public class Tag4Game extends Game implements Listener {
     ItemStack amethyst_shard = generateItemStack(Material.AMETHYST_SHARD, "§l§8脏液", new String[] {"缓慢回复一定生命值","但同时会获得反胃","§7狂信的患者为了证明医学的正确性，而自行患上疾病"});
     ItemStack ghast_tear = generateItemStack(Material.GHAST_TEAR, "§l§9克缇的泪花", new String[]{"减少一半当前生命值","赋予全场友方角色隐身","(使用后转变为童话绘本)","§7克缇...是坏孩子吗?...","§7不要抛下克缇好吗......"});
     ItemStack enchanted_book2 = generateItemStack(Material.ENCHANTED_BOOK, "§l§9童话绘本", new String[]{"持有者死亡时无法被复活","且永久发光","减少最大生命值上限","§赋予全场友方角色短暂的加速和免伤","§7克缇遗落的绘本","§7某一天，","§7人鱼公主爱上出现在海边的王子。","§7那绝对无法得到回报的恋爱不断膨胀，令海啸袭击王子的国家"});
+    ItemStack mushroom_stew = generateItemStack(Material.MUSHROOM_STEW, "§2比尔的便当", new String[]{"可以为已损失生命值最多的友方角色恢复全部生命值","","§7§o充满女子力的便当，篮子里塞满了蛋和各种各样的果物"});
+    ItemStack medium_amethyst_bud = generateItemStack(Material.MEDIUM_AMETHYST_BUD, "§d§l女仆维多利雅的誓约", new String[]{"右键切换至魅魔形态","持有者拥有常驻速度提升和跳跃提升","不会因为污秽的黑之魂减少最大生命值上限","§7§o明明已经说了不要再接近却仍然定下了誓约", "§7§o那就请您做好即使从噩梦中醒来也无法逃脱的心理准备吧","§c§o主人大人"});
+    ItemStack large_amethyst_bud = generateItemStack(Material.LARGE_AMETHYST_BUD, "§d§l魅魔维多利雅的誓约", new String[]{"右键切换至女仆形态","持有者拥有常驻抗性提升，并且附近存在角色时(无论敌我)能缓慢回复生命值","§7§o明明已经说了不要再接近却仍然定下了誓约", "§7§o那就请您做好即使从噩梦中醒来也无法逃脱的心理准备吧","§c§o主人大人"});
+
 
     List<ItemStack> gadgets = Arrays.asList(feather, glass_bottle, nether_star, clock, potion, honey_bottle, coal, dragon_breath,experience_bottle,amethyst_shard);
     List<Integer> gadgetWeights = Arrays.asList(10, 5, 1, 10, 1, 10, 5, 10, 5, 10);
@@ -368,35 +372,36 @@ public class Tag4Game extends Game implements Listener {
 
             switch (pie.getItem().getType()) {
                 case MUSHROOM_STEW -> {
-                    if (checkCoolDown(executor, c.getInt("bill.cd"))) {
-                        Player humanWhoLostMostHealth = executor;
-                        double lostHealth = 0;
-                        for (Player p : humans) {
-                            if (tag4dodo.hasPlayer(p) || tag4bill.hasPlayer(p) || tag4faketurtle.hasPlayer(p)) {
-                                continue;
-                            }
-                            double newLostHealth = p.getMaxHealth() - p.getHealth();
-                            if (newLostHealth >= lostHealth) {
-                                humanWhoLostMostHealth = p;
-                                lostHealth = newLostHealth;
-                            }
+                    pie.getItem().setAmount(pie.getItem().getAmount() - 1);
+                    Player humanWhoLostMostHealth = executor;
+                    double lostHealth = 0;
+                    for (Player p : humans) {
+                        if (tag4dodo.hasPlayer(p) || tag4bill.hasPlayer(p)) {
+                            continue;
                         }
-                        if (lostHealth == 0) {
-                            clearCoolDown(executor);
-                            executor.sendMessage("§c己方可选目标玩家全部满血！技能未生效！");
-                        } else {
-                            humanWhoLostMostHealth.setHealth(humanWhoLostMostHealth.getMaxHealth());
-                            executor.sendMessage("§a为 §f" + humanWhoLostMostHealth.getName() + " §a恢复全部生命值！");
-                            humanWhoLostMostHealth.sendMessage("§2" + executor.getName() + " §f为你恢复了全部生命值！");
+                        double newLostHealth = p.getMaxHealth() - p.getHealth();
+                        if (newLostHealth >= lostHealth) {
+                            humanWhoLostMostHealth = p;
+                            lostHealth = newLostHealth;
                         }
+                    }
+                    if (lostHealth == 0) {
+                        clearCoolDown(executor);
+                        executor.sendMessage("§c己方可选目标玩家全部满血！技能未生效！");
+                    } else {
+                        humanWhoLostMostHealth.setHealth(humanWhoLostMostHealth.getMaxHealth());
+                        executor.sendMessage("§a为 §f" + humanWhoLostMostHealth.getName() + " §a恢复全部生命值！");
+                        humanWhoLostMostHealth.sendMessage("§2" + executor.getName() + " §f为你恢复了全部生命值！");
                     }
                 }
                 case ENDER_EYE -> {
-                    if (checkCoolDown(executor, c.getInt("mabel.active-blindness-cd"))) {
-                        executor.sendMessage("§a给予所有鬼失明效果！");
+                    if (checkCoolDown(executor, c.getInt("mabel.active-cd"))) {
+                        executor.sendMessage("§a给予所有鬼发光、失明、缓慢效果！");
                         for (Player p : devils) {
-                            p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, c.getInt("mabel.active-blindness-duration"), 0));
-                            p.sendMessage("§c被梅贝尔给予失明效果！");
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, c.getInt("mabel.active-duration"), 0));
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, c.getInt("mabel.active-duration"), 0));
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, c.getInt("mabel.active-duration"), 1));
+                            p.sendMessage("§c被梅贝尔给予发光、失明、缓慢效果！");
                         }
                     }
                 }
@@ -416,6 +421,8 @@ public class Tag4Game extends Game implements Listener {
                         executor.sendMessage("§c没有可以复活的友方角色！");
                     } else {
                         revivePlayer(target);
+                        target.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100, 0, false, false));
+                        target.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 3, false, false));
                         pie.getItem().setAmount(pie.getItem().getAmount() - 1);
                         executor.getInventory().addItem(enchanted_book);
                         executor.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10000000, 0));
@@ -456,7 +463,17 @@ public class Tag4Game extends Game implements Listener {
                     }
                 }
 
+                case MEDIUM_AMETHYST_BUD -> {
+                    pie.getItem().setAmount(pie.getItem().getAmount() - 1);
+                    executor.getInventory().addItem(large_amethyst_bud);
+                    executor.sendMessage("§d切换至魅魔形态！");
+                }
 
+                case LARGE_AMETHYST_BUD -> {
+                    pie.getItem().setAmount(pie.getItem().getAmount() - 1);
+                    executor.getInventory().addItem(medium_amethyst_bud);
+                    executor.sendMessage("§d切换至女仆形态！");
+                }
 
                 case COAL -> {
                     if (tag4norden.hasPlayer(executor) || tag4victoria.hasPlayer(executor)) {
@@ -467,7 +484,7 @@ public class Tag4Game extends Game implements Listener {
                         if (executor.getMaxHealth() > 3) {
                             executor.sendMessage("§c最大生命值减少，生命全部恢复！");
                             executor.setMaxHealth(executor.getMaxHealth() - 3);
-                            if ((!tag4bill.hasPlayer(executor)) && !(tag4dodo.hasPlayer(executor))) {
+                            if (!(tag4dodo.hasPlayer(executor))) {
                                 executor.setHealth(executor.getMaxHealth());
                             } else {
                                 executor.sendMessage("§c你无法通过这种方式恢复生命值！");
@@ -496,14 +513,14 @@ public class Tag4Game extends Game implements Listener {
                     executor.sendMessage("§c回复一半最大生命值，获得与回复量相同的发光时长！");
                     if (executor.getHealth() * 2 < executor.getMaxHealth()) {
                         executor.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, (int) (executor.getMaxHealth() * 10), 0, false, false));
-                        if ((!tag4bill.hasPlayer(executor)) && !(tag4dodo.hasPlayer(executor))) {
+                        if (!(tag4dodo.hasPlayer(executor))) {
                             executor.setHealth(executor.getHealth() + executor.getMaxHealth() / 2);
                         }else {
                             executor.sendMessage("§c你无法通过这种方式恢复生命值！");
                         }
                     } else {
                         executor.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, (int) ((executor.getMaxHealth() - executor.getHealth()) * 20), 0, false, false));
-                        if ((!tag4bill.hasPlayer(executor)) && !(tag4dodo.hasPlayer(executor))) {
+                        if (!(tag4dodo.hasPlayer(executor))) {
                             executor.setHealth(executor.getMaxHealth());
                         } else {
                             executor.sendMessage("§c你无法通过这种方式恢复生命值！");
@@ -1060,6 +1077,8 @@ public class Tag4Game extends Game implements Listener {
                             setCoolDown(p, 600, 3600);
                         } else if (tag4kelti.hasPlayer(p)) {
                             p.getInventory().addItem(ghast_tear);
+                        } else if (tag4bill.hasPlayer(p)) {
+                            p.getInventory().addItem(mushroom_stew);
                         }
                         p.setHealth(20);
                         p.sendTitle("§e游戏开始！", null, 2, 16, 2);
@@ -1145,6 +1164,20 @@ public class Tag4Game extends Game implements Listener {
                     }
                 }, countDownSeconds * 20L + 400 + 600, 1200));
 
+                taskIds.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+                    for (Player p : humans) {
+                        if (tag4bill.hasPlayer(p)) {
+                            int counter = 0;
+                            for (ItemStack i : p.getInventory().all(Material.MUSHROOM_STEW).values()) {
+                                counter += i.getAmount();
+                            }
+                            if (counter < 2) {
+                                p.getInventory().addItem(mushroom_stew);
+                                p.sendMessage("§a获得便当！");
+                            }
+                        }
+                    }
+                }, countDownSeconds * 20L + 400 + 1200, 1200));
 
                 taskIds.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                     for (Player p : humans) {
@@ -1166,12 +1199,18 @@ public class Tag4Game extends Game implements Listener {
                 taskIds.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                     for (Player p : humans) {
                         if (tag4victoria.hasPlayer(p)) {
-                            for (Entity e : p.getNearbyEntities(c.getInt("victoria.radiusX"),c.getInt("victoria.radiusY"),c.getInt("victoria.radiusZ"))) {
-                                if (players.contains(e)) {
-                                    return;
+                            if (p.getInventory().contains(Material.MEDIUM_AMETHYST_BUD)) {
+                                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 55, 0, false, false));
+                                p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 55, 0, false, false));
+                            } else if (p.getInventory().contains(Material.LARGE_AMETHYST_BUD)) {
+                                p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 55, 1, false, false));
+                                for (Entity e : p.getNearbyEntities(c.getInt("victoria.radiusX"),c.getInt("victoria.radiusY"),c.getInt("victoria.radiusZ"))) {
+                                    if (players.contains(e)) {
+                                        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 50, 0, false, false));
+                                        break;
+                                    }
                                 }
                             }
-                            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 50, 0, false, false));
                         }
                     }
                 }, countDownSeconds * 20L + 400, 50));

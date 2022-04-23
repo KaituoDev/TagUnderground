@@ -1,7 +1,7 @@
 mabel:
   passive-blindness-duration: 100
-  active-blindness-cd: 1500
-  active-blindness-duration: 100
+  active-cd: 1500
+  active-duration: 100
 redhat:
   duration: 100
   regeneration-amplifier: 0
