@@ -373,7 +373,6 @@ public class Tag4Game extends Game implements Listener {
 
             switch (pie.getItem().getType()) {
                 case MUSHROOM_STEW -> {
-                    pie.getItem().setAmount(pie.getItem().getAmount() - 1);
                     Player humanWhoLostMostHealth = executor;
                     double lostHealth = 0;
                     for (Player p : humans) {
@@ -390,6 +389,7 @@ public class Tag4Game extends Game implements Listener {
                         clearCoolDown(executor);
                         executor.sendMessage("§c己方可选目标玩家全部满血！技能未生效！");
                     } else {
+                        pie.getItem().setAmount(pie.getItem().getAmount() - 1);
                         humanWhoLostMostHealth.setHealth(humanWhoLostMostHealth.getMaxHealth());
                         executor.sendMessage("§a为 §f" + humanWhoLostMostHealth.getName() + " §a恢复全部生命值！");
                         humanWhoLostMostHealth.sendMessage("§2" + executor.getName() + " §f为你恢复了全部生命值！");
@@ -842,7 +842,7 @@ public class Tag4Game extends Game implements Listener {
         }
         switch (pdie.getItemDrop().getItemStack().getType()) {
             case RABBIT_FOOT, BOOK, STRING, HEART_OF_THE_SEA, ENCHANTED_BOOK, ENDER_EYE, RED_DYE, POPPED_CHORUS_FRUIT,
-                    TOTEM_OF_UNDYING, END_ROD, FEATHER, TURTLE_EGG,MEDIUM_AMETHYST_BUD, BLAZE_POWDER, MUSHROOM_STEW, BEETROOT_SOUP,
+                    TOTEM_OF_UNDYING, END_ROD, FEATHER, TURTLE_EGG,MEDIUM_AMETHYST_BUD,LARGE_AMETHYST_BUD, BLAZE_POWDER, MUSHROOM_STEW, BEETROOT_SOUP,
                     IRON_SWORD, NETHERITE_AXE, NETHERITE_HOE, NETHERITE_SWORD, CHARCOAL-> pdie.setCancelled(true);
             default -> {
             }
