@@ -80,7 +80,7 @@ public class Tag4Game extends Game implements Listener {
     FileConfiguration c;
 
 
-    HashMap<Player, List<Long>> coolDown;
+    HashMap<Player, List<Long>> coolDown = new HashMap<>();
     HashMap<ArmorStand, ArmorStand> armourStandMap = new HashMap<>();
     HashMap<ArmorStand, Player> playerMap = new HashMap<>();
 
@@ -116,6 +116,8 @@ public class Tag4Game extends Game implements Listener {
         for (int i : gadgetWeights) {
             totalWeight += i;
         }
+
+
         c = plugin.getConfig();
         tag4norden = scoreboard.getTeam("tag4norden");
         tag4baphomet = scoreboard.getTeam("tag4baphomet");
