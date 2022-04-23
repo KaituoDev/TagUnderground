@@ -80,8 +80,7 @@ public class Tag4Game extends Game implements Listener {
     FileConfiguration c;
 
 
-    HashMap<Player, Long> cd1 = new HashMap<>();
-    HashMap<Player, Long> cd2 = new HashMap<>();
+    HashMap<Player, List<Long>> coolDown;
     HashMap<ArmorStand, ArmorStand> armourStandMap = new HashMap<>();
     HashMap<ArmorStand, Player> playerMap = new HashMap<>();
 
@@ -180,10 +179,9 @@ public class Tag4Game extends Game implements Listener {
 
         //以下是自带天赋
         if (tag4kelti.hasPlayer(p)) {
-            if (checkCoolDown(p, 60, cd1)) {
-                p.sendMessage("§b获得暂时隐身！");
-                p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, c.getInt("kelti.invisibility-duration"), 0, false, false));
-            }
+            p.sendMessage("§b获得暂时隐身！");
+            p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, c.getInt("kelti.invisibility-duration"), 0, false, false));
+
         } else if (tag4dodo.hasPlayer(p)) {
             p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, c.getInt("dodo.speed-duration"), 1));
         } else if (tag4redhat.hasPlayer(p)) {
@@ -289,7 +287,7 @@ public class Tag4Game extends Game implements Listener {
             pie.setCancelled(true);
             if (((Chest) (block.getState())).getBlockInventory().isEmpty()) {
                 executor.sendMessage("§c这个箱子是空的！");
-            } else if (checkCoolDown(executor, 600, cd1)) {
+            } else if (checkCoolDown(executor, 600)) {
                 ((Chest) (block.getState())).getBlockInventory().clear();
                 executor.sendMessage("§a成功破坏箱子内的所有道具！");
             }
@@ -334,7 +332,7 @@ public class Tag4Game extends Game implements Listener {
 
             switch (pie.getItem().getType()) {
                 case NETHERITE_SWORD -> {
-                    if (checkCoolDown(executor, 3600, cd1)) {
+                    if (checkCoolDown(executor, 3600)) {
                         for (Player p: humans) {
                             p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 200, 0, true, false));
                         }
@@ -368,7 +366,7 @@ public class Tag4Game extends Game implements Listener {
 
             switch (pie.getItem().getType()) {
                 case MUSHROOM_STEW -> {
-                    if (checkCoolDown(executor, c.getInt("bill.cd"), cd1)) {
+                    if (checkCoolDown(executor, c.getInt("bill.cd"))) {
                         Player humanWhoLostMostHealth = executor;
                         double lostHealth = 0;
                         for (Player p : humans) {
@@ -392,7 +390,7 @@ public class Tag4Game extends Game implements Listener {
                     }
                 }
                 case ENDER_EYE -> {
-                    if (checkCoolDown(executor, c.getInt("mabel.active-blindness-cd"), cd1)) {
+                    if (checkCoolDown(executor, c.getInt("mabel.active-blindness-cd"))) {
                         executor.sendMessage("§a给予所有鬼失明效果！");
                         for (Player p : devils) {
                             p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, c.getInt("mabel.active-blindness-duration"), 0));
@@ -440,7 +438,7 @@ public class Tag4Game extends Game implements Listener {
 
                 case ENCHANTED_BOOK -> {
                     if (tag4kelti.hasPlayer(executor)) {
-                        if (checkCoolDown(executor, 1200, cd2)) {
+                        if (checkCoolDown(executor, 1200)) {
                             executor.sendMessage("§a减少生命值上限，赋予全场友方角色加速和免伤！");
                             if (executor.getMaxHealth() <= 3) {
                                 executor.setHealth(0);
@@ -604,24 +602,27 @@ public class Tag4Game extends Game implements Listener {
     }
 
     public void clearCoolDown(Player p) {
-        if (cd1.get(p) != null) {
-            cd1.remove(p);
+        p.setLevel(0);
+        p.setExp(0);
+        if (coolDown.get(p) != null) {
+            coolDown.get(p).set(0, 0L);
+            coolDown.get(p).set(1, 0L);
         }
     }
 
-    public boolean checkCoolDown(Player p, long coolDown, HashMap<Player, Long> coolDownMap) {
-        if (coolDownMap.get(p) == null) {
-            coolDownMap.put(p, getTime(world));
+    private void setCoolDown(Player p, long remainingCoolDown, long totalCoolDown) {
+        coolDown.get(p).set(0, remainingCoolDown);
+        coolDown.get(p).set(1, totalCoolDown);
+    }
+
+    private boolean checkCoolDown(Player p, long cd) {
+        if (coolDown.get(p).get(0) == 0) {
+            coolDown.get(p).set(0, cd);
+            coolDown.get(p).set(1, cd);
             return true;
         } else {
-            long timeLapsed = getTime(world) - coolDownMap.get(p);
-            if (timeLapsed < coolDown) {
-                p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§c§l技能冷却中！ 还剩 §6§l" + (int) ((coolDown - timeLapsed) / 20) + " §c§l秒"));
-                return false;
-            } else {
-                coolDownMap.put(p, getTime(world));
-                return true;
-            }
+            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§4§l技能冷却中！"));
+            return false;
         }
     }
 
@@ -651,7 +652,7 @@ public class Tag4Game extends Game implements Listener {
         if (humans.contains(damager) && devils.contains(victim)) {
             if (tag4eunice.hasPlayer(damager)) {
                 if (damager.getInventory().getItemInMainHand().getType().equals(Material.IRON_SWORD)) {
-                    if (checkCoolDown(damager,  c.getInt("eunice.cd"), cd1)) {
+                    if (checkCoolDown(damager,  c.getInt("eunice.cd"))) {
                         damager.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, c.getInt("eunice.duration"), 1, false, false));
                         damager.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,  150, 1, false, false));
                         damager.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,  c.getInt("eunice.duration"), 0, false, false));
@@ -1010,6 +1011,30 @@ public class Tag4Game extends Game implements Listener {
                         }
                     }, countDownSeconds * 20L + 300 + i * 20);
                 }
+
+                taskIds.add(
+                        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, ()-> {
+                            for (Player p : players) {
+                                if (coolDown.get(p) == null) {
+                                    List<Long> l = new ArrayList<>(2);
+                                    l.add(0,0L);
+                                    l.add(1,0L);
+                                    coolDown.put(p, l);
+                                } else {
+                                    List<Long> l = coolDown.get(p);
+                                    //p.sendMessage(String.valueOf(l.get(0)));
+                                    if (l.get(0) > 0) {
+                                        l.set(0, l.get(0) - 1);
+                                    }
+                                    if (l.get(1) != 0) {
+                                        p.setLevel((int) Math.ceil(((float)l.get(0)) / 20));
+                                        p.setExp(((float)(l.get(1) - l.get(0))) / l.get(1));
+                                    }
+
+                                }
+                            }
+                        }, 1,1 ));
+
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     placeSpectateButton();
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "function tag4:go");
@@ -1030,7 +1055,7 @@ public class Tag4Game extends Game implements Listener {
                         if (tag4leaf.hasPlayer(p)) {
                             p.getInventory().addItem(coal);
                         } else if (tag4lindamayer.hasPlayer(p)) {
-                            cd1.put(p, getTime(world) - 3000);
+                            setCoolDown(p, 600, 3600);
                         } else if (tag4kelti.hasPlayer(p)) {
                             p.getInventory().addItem(ghast_tear);
                         }
@@ -1177,6 +1202,7 @@ public class Tag4Game extends Game implements Listener {
                     tag4.getObjective("tag4").getScore("剩余人数").setScore(humans.size());
                     tag4.getObjective("tag4").getScore("剩余时间").setScore((int) ((gameTime - (time - startTime)) / 20));
                 }, countDownSeconds * 20L + 400, 1));
+
             }
         };
     }
