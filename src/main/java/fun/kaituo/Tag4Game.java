@@ -166,7 +166,13 @@ public class Tag4Game extends Game implements Listener {
         if (!(ede.getEntity() instanceof Player)) {
             return;
         }
-
+        if (ede.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
+            if ((((EntityDamageByEntityEvent) ede).getDamager() instanceof Player)) {
+                if (humans.contains(((EntityDamageByEntityEvent) ede).getDamager())) {
+                    return;
+                }
+            }
+        }//友军不能触发特效
 
         Player p = (Player) ede.getEntity();
         if (tag4cheshirecat.hasPlayer(p)) {
@@ -189,6 +195,7 @@ public class Tag4Game extends Game implements Listener {
             p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, c.getInt("kelti.invisibility-duration"), 0, false, false));
 
         } else if (tag4dodo.hasPlayer(p)) {
+            p.sendMessage("获得加速！");
             p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, c.getInt("dodo.speed-duration"), 1));
         } else if (tag4redhat.hasPlayer(p)) {
             p.sendMessage("获得生命恢复与发光！");
@@ -641,16 +648,16 @@ public class Tag4Game extends Game implements Listener {
         coolDown.get(p).set(1, totalCoolDown);
     }
 
-    private boolean checkCoolDown(Player p, long cd) {
-        if (coolDown.get(p).get(0) == 0) {
-            coolDown.get(p).set(0, cd);
-            coolDown.get(p).set(1, cd);
-            return true;
-        } else {
-            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§4§l技能冷却中！"));
-            return false;
+        private boolean checkCoolDown(Player p, long cd) {
+            if (coolDown.get(p).get(0) == 0) {
+                coolDown.get(p).set(0, cd);
+                coolDown.get(p).set(1, cd);
+                return true;
+            } else {
+                p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§4§l技能冷却中！"));
+                return false;
+            }
         }
-    }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent pde) {
