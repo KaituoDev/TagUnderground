@@ -226,16 +226,16 @@ public class Tag4Game extends Game implements Listener {
         p.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 999999, 0, false, false));
     }
 
-    private void revivePlayer(ArmorStand s) {
+    private Player revivePlayer(ArmorStand s) {
         if ((armourStandMap.get(s) == null)) {
-            return;
+            return null;
         }
         if (!playerMap.containsKey(s)) {
-            return;
+            return null;
         }
         Player p = playerMap.get(s);
         if (!(players.contains(p) && !humans.contains(p))) {
-            return;
+            return null;
         }
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             Location l = s.getLocation();
@@ -249,6 +249,7 @@ public class Tag4Game extends Game implements Listener {
         s.remove();
         armourStandMap.remove(s);
         playerMap.remove(s);
+        return p;
     }
 
     @EventHandler
@@ -420,9 +421,11 @@ public class Tag4Game extends Game implements Listener {
                     if (target == null) {
                         executor.sendMessage("§c没有可以复活的友方角色！");
                     } else {
-                        revivePlayer(target);
-                        target.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100, 0, false, false));
-                        target.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 3, false, false));
+                        Player p = revivePlayer(target);
+                        if (p != null) {
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100, 0, false, false));
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 3, false, false));
+                        }
                         pie.getItem().setAmount(pie.getItem().getAmount() - 1);
                         executor.getInventory().addItem(enchanted_book);
                         executor.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10000000, 0));
@@ -464,15 +467,19 @@ public class Tag4Game extends Game implements Listener {
                 }
 
                 case MEDIUM_AMETHYST_BUD -> {
-                    pie.getItem().setAmount(pie.getItem().getAmount() - 1);
-                    executor.getInventory().addItem(large_amethyst_bud);
-                    executor.sendMessage("§d切换至魅魔形态！");
+                    if (checkCoolDown(executor, 50)) {
+                        pie.getItem().setAmount(pie.getItem().getAmount() - 1);
+                        executor.getInventory().addItem(large_amethyst_bud);
+                        executor.sendMessage("§d切换至魅魔形态！");
+                    }
                 }
 
                 case LARGE_AMETHYST_BUD -> {
-                    pie.getItem().setAmount(pie.getItem().getAmount() - 1);
-                    executor.getInventory().addItem(medium_amethyst_bud);
-                    executor.sendMessage("§d切换至女仆形态！");
+                    if (checkCoolDown(executor, 50)) {
+                        pie.getItem().setAmount(pie.getItem().getAmount() - 1);
+                        executor.getInventory().addItem(medium_amethyst_bud);
+                        executor.sendMessage("§d切换至女仆形态！");
+                    }
                 }
 
                 case COAL -> {
