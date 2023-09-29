@@ -1,6 +1,6 @@
 api-version: 1.13
-name: Tag4
-main: fun.kaituo.Tag4
-version: 1.0
+name: TagUnderground
+main: fun.kaituo.tagunderground.TagUnderground
+version: 1.1
 author: YFshadaow
 depend: [GameUtils]

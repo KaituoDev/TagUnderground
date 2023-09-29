@@ -1,9 +1,10 @@
-package fun.kaituo;
+package fun.kaituo.tagunderground;
 
 
-import fun.kaituo.event.PlayerChangeGameEvent;
-import fun.kaituo.event.PlayerEndGameEvent;
-import fun.kaituo.utils.ItemStackBuilder;
+import fun.kaituo.gameutils.Game;
+import fun.kaituo.gameutils.PlayerQuitData;
+import fun.kaituo.gameutils.event.PlayerEndGameEvent;
+import fun.kaituo.gameutils.utils.ItemStackBuilder;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -33,19 +34,17 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-import org.bukkit.util.BoundingBox;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 import java.util.*;
 
-import static fun.kaituo.GameUtils.*;
 
-public class Tag4Game extends Game implements Listener {
-    private static final Tag4Game instance = new Tag4Game((Tag4) Bukkit.getPluginManager().getPlugin("Tag4"));
+public class TagUndergroundGame extends Game implements Listener {
+    private static final TagUndergroundGame instance = new TagUndergroundGame((TagUnderground) Bukkit.getPluginManager().getPlugin("TagUnderground"));
     Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
     Scoreboard tag4 = Bukkit.getScoreboardManager().getNewScoreboard();
-    Tag4 plugin;
+    TagUnderground plugin;
     List<Player> humans = new ArrayList<>();
     List<Player> devils = new ArrayList<>();
 
@@ -108,13 +107,13 @@ public class Tag4Game extends Game implements Listener {
 
     int totalWeight;
 
-    private Tag4Game(Tag4 plugin) {
+    private TagUndergroundGame(TagUnderground plugin) {
         this.plugin = plugin;
-        initializeGame(plugin, "Tag4",  "§3地下箱庭", new Location(world, -1003.0, 81, 2021.0),
-                new BoundingBox(-1200, 0, 1800, -800, 200, 2200));
+        initializeGame(plugin, "TagUnderground",  "§3地下箱庭", new Location(world, -1003.0, 81, 2021.0));
         initializeButtons(new Location(world, -1003, 82, 2027), BlockFace.NORTH,
                 new Location(world, -1004, 82, 2027), BlockFace.NORTH);
-        players = Tag4.players;
+        initializeGameRunnable();
+        players = TagUnderground.players;
         tag4.registerNewObjective("tag4", "dummy", "鬼抓人");
         tag4.getObjective("tag4").setDisplaySlot(DisplaySlot.SIDEBAR);
         for (int i : gadgetWeights) {
@@ -152,7 +151,7 @@ public class Tag4Game extends Game implements Listener {
         }
     }
 
-    public static Tag4Game getInstance() {
+    public static TagUndergroundGame getInstance() {
         return instance;
     }
 
@@ -866,33 +865,28 @@ public class Tag4Game extends Game implements Listener {
         }
     }
 
-    @EventHandler
-    public void onPlayerChangeGame(PlayerChangeGameEvent pcge) {
-        players.remove(pcge.getPlayer());
-        humans.remove(pcge.getPlayer());
-        devils.remove(pcge.getPlayer());
-    }
 
-    public void savePlayerQuitData(Player p) {
+    @Override
+    protected void quit(Player p) {
         PlayerQuitData quitData = new PlayerQuitData(p, this, gameUUID);
         quitData.getData().put("team", whichGroup(p));
-        setPlayerQuitData(p.getUniqueId(), quitData);
+        gameUtils.setPlayerQuitData(p.getUniqueId(), quitData);
         players.remove(p);
         humans.remove(p);
         devils.remove(p);
     }
 
     @Override
-    protected void rejoin(Player p) {
+    protected boolean rejoin(Player p) {
         if (!running) {
             p.sendMessage("§c游戏已经结束！");
-            return;
+            return false;
         }
-        if (!getPlayerQuitData(p.getUniqueId()).getGameUUID().equals(gameUUID)) {
+        if (!gameUtils.getPlayerQuitData(p.getUniqueId()).getGameUUID().equals(gameUUID)) {
             p.sendMessage("§c游戏已经结束！");
-            return;
+            return false;
         }
-        PlayerQuitData pqd = getPlayerQuitData(p.getUniqueId());
+        PlayerQuitData pqd = gameUtils.getPlayerQuitData(p.getUniqueId());
         pqd.restoreBasicData(p);
         players.add(p);
         team.addPlayer(p);
@@ -900,7 +894,23 @@ public class Tag4Game extends Game implements Listener {
         if (pqd.getData().get("team") != null) {
             ((List<Player>) pqd.getData().get("team")).add(p);
         }
-        setPlayerQuitData(p.getUniqueId(), null);
+        gameUtils.setPlayerQuitData(p.getUniqueId(), null);
+        return true;
+    }
+
+    @Override
+    protected boolean join(Player p) {
+        p.setBedSpawnLocation(hubLocation, true);
+        p.teleport(hubLocation);
+        tag4norden.addPlayer(p);
+        return true;
+    }
+
+    @Override
+    protected void forceStop() {
+        if (running) {
+            endGame("§c游戏被强制终止", new ArrayList<>());
+        }
     }
 
     private List<Player> whichGroup(Player p) {
@@ -958,10 +968,9 @@ public class Tag4Game extends Game implements Listener {
         cancelGameTasks();
     }
 
-    @Override
     protected void initializeGameRunnable() {
         gameRunnable = () -> {
-            gameTime = Tag4.gameTime;
+            gameTime = TagUnderground.gameTime;
             team = tag4.registerNewTeam("tag4");
             team.setNameTagVisibility(NameTagVisibility.NEVER);
             team.setCanSeeFriendlyInvisibles(false);
