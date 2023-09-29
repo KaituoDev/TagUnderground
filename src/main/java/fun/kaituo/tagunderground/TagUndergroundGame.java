@@ -868,6 +868,9 @@ public class TagUndergroundGame extends Game implements Listener {
 
     @Override
     protected void quit(Player p) {
+        if (!players.contains(p)) {
+            return;
+        }
         PlayerQuitData quitData = new PlayerQuitData(p, this, gameUUID);
         quitData.getData().put("team", whichGroup(p));
         gameUtils.setPlayerQuitData(p.getUniqueId(), quitData);
