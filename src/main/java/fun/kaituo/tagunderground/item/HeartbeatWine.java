@@ -2,6 +2,7 @@ package fun.kaituo.tagunderground.item;
 
 import fun.kaituo.tagunderground.TagUnderground;
 import fun.kaituo.tagunderground.character.Bill;
+import fun.kaituo.tagunderground.character.Dodo;
 import fun.kaituo.tagunderground.util.ActiveItem;
 import fun.kaituo.tagunderground.util.PlayerData;
 import org.bukkit.entity.Player;
@@ -19,7 +20,7 @@ public class HeartbeatWine extends ActiveItem {
     public boolean use(Player p) {
         PlayerData data = TagUnderground.inst().idDataMap.get(p.getUniqueId());
         assert data != null;
-        if (data.getClass().equals(Bill.class)) {
+        if (data.getClass().equals(Bill.class) || data.getClass().equals(Dodo.class)) {
             p.sendMessage("§c你不能使用这个道具！");
             return false;
         }

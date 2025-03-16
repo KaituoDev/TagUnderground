@@ -20,6 +20,7 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -65,6 +66,7 @@ public class HuntState implements GameState, Listener {
     private Location waitBlock;
     private Objective remainingTimeObjective;
     private Score remainingTimeScore;
+    private BoundingBox box;
     private final Set<Integer> taskIds = new HashSet<>();
     public final Set<Item> items = new HashSet<>();
 
@@ -93,8 +95,18 @@ public class HuntState implements GameState, Listener {
         waitBlock = game.getLoc("waitBlock");
         remainingTimeObjective = game.getTagBoard().registerNewObjective("remainingTime", Criteria.DUMMY, "鬼抓人");
         remainingTimeScore = remainingTimeObjective.getScore("剩余时间");
+        initBox();
         initItems();
         initChests();
+    }
+
+    private void initBox() {
+        Location pos1 = game.getLoc("pos1");
+        Location pos2 = game.getLoc("pos2");
+        assert pos1 != null;
+        assert pos2 != null;
+        box = new BoundingBox(pos1.getBlockX(), pos1.getBlockY(), pos1.getBlockZ(),
+                pos2.getBlockX(), pos2.getBlockY(), pos2.getBlockZ());
     }
 
     @Override
@@ -134,16 +146,10 @@ public class HuntState implements GameState, Listener {
     }
 
     private void initChests() {
-        Location pos1 = game.getLoc("pos1");
-        Location pos2 = game.getLoc("pos2");
-        assert pos1 != null;
-        assert pos2 != null;
-        BoundingBox box = new BoundingBox(pos1.getBlockX(), pos1.getBlockY(), pos1.getBlockZ(),
-                pos2.getBlockX(), pos2.getBlockY(), pos2.getBlockZ());
         for (int x = (int) box.getMinX(); x <= box.getMaxX(); x += 1) {
             for (int y = (int) box.getMinY(); y <= box.getMaxY(); y += 1) {
                 for (int z = (int) box.getMinZ(); z <= box.getMaxZ(); z += 1) {
-                    World world = pos1.getWorld();
+                    World world = start.getWorld();
                     Block b = world.getBlockAt(x, y, z);
                     if (b.getType().equals(Material.CHEST) || b.getType().equals(Material.TRAPPED_CHEST)) {
                         chests.add(new LootChest(new Location(world, x, y, z)));
@@ -294,6 +300,11 @@ public class HuntState implements GameState, Listener {
         }
         restorePlatform();
         clearCorpses();
+        for (Entity entity : start.getWorld().getNearbyEntities(box)) {
+            if (entity instanceof org.bukkit.entity.Item) {
+                entity.remove();
+            }
+        }
     }
 
     @EventHandler

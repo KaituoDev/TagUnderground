@@ -2,6 +2,7 @@ package fun.kaituo.tagunderground.item;
 
 import fun.kaituo.tagunderground.TagUnderground;
 import fun.kaituo.tagunderground.character.Bill;
+import fun.kaituo.tagunderground.character.Dodo;
 import fun.kaituo.tagunderground.character.Norden;
 import fun.kaituo.tagunderground.character.Victoria;
 import fun.kaituo.tagunderground.util.ActiveItem;
@@ -19,7 +20,7 @@ public class BlackSoul extends ActiveItem {
     public boolean use(Player p) {
         PlayerData data = TagUnderground.inst().idDataMap.get(p.getUniqueId());
         assert data != null;
-        if (data.getClass().equals(Bill.class)) {
+        if (data.getClass().equals(Bill.class) || data.getClass().equals(Dodo.class)) {
             p.sendMessage("§c你不能使用这个道具！");
             return false;
         }

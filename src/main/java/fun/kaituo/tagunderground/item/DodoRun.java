@@ -23,13 +23,6 @@ public class DodoRun extends ActiveItem {
         p.getInventory().addItem(dodoRunFaster);
         p.sendMessage("§b获得加速！");
         p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 0));
-
-        PlayerData data = TagUnderground.inst().idDataMap.get(p.getUniqueId());
-        assert data != null;
-        if (data.getClass().equals(Dodo.class)) {
-            p.sendMessage("§a获得额外治疗！");
-            p.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH, 1, 0));
-        }
         return true;
     }
 }

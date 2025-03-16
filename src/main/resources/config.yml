@@ -42,3 +42,7 @@ characters:
   Mabel:
     cd: 1500
     duration: 100
+  Kelti:
+    cd: 2400
+    skill-duration: 100
+    invisibility-duration: 20
