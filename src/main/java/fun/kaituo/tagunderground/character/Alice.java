@@ -48,7 +48,7 @@ public class Alice extends Human {
             return;
         }
         // Only revive if hand is empty.
-        if (p.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
+        if (!p.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
             return;
         }
         Entity entity = e.getRightClicked();
