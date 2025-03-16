@@ -67,7 +67,7 @@ public class Corpse{
             headPart.teleport(iceLocation);
         }, 5).getTaskId());
         taskIds.add(Bukkit.getScheduler().runTaskLater(TagUnderground.inst(), () -> {
-            mainPart.getEquipment().setHelmet(new ItemStack(Material.COMPOSTER));
+            mainPart.getEquipment().setHelmet(new ItemStack(Material.VAULT));
             headPart.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, -1, 0));
         }, 6).getTaskId());
         taskIds.add(Bukkit.getScheduler().runTaskLater(TagUnderground.inst(), () -> {
