@@ -39,3 +39,6 @@ characters:
   Bill:
     cd: 2400
     serpent-god-blood-obtain-cooldown: 3600
+  Mabel:
+    cd: 1500
+    duration: 100

@@ -234,7 +234,7 @@ public class HuntState implements GameState, Listener {
     private void restorePlatform() {
         for (int x = waitBlock.getBlockX() - 1; x <= waitBlock.getBlockX() + 1; x++) {
             for (int z = waitBlock.getBlockZ() - 1; z <= waitBlock.getBlockZ() + 1; z++) {
-                waitBlock.getWorld().getBlockAt(x, waitBlock.getBlockY(), z).setType(Material.BARRIER);
+                waitBlock.getWorld().getBlockAt(x, waitBlock.getBlockY(), z).setType(Material.TUFF);
             }
         }
     }

@@ -2,7 +2,6 @@ package fun.kaituo.tagunderground.util;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import fun.kaituo.tagunderground.TagUnderground;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -38,20 +37,15 @@ public class Hunter extends PlayerData{
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent e) {
         if (!e.getDamager().getUniqueId().equals(playerId)) {
-            Bukkit.broadcastMessage("1");
             return;
         }
         PlayerData victimData = TagUnderground.inst().idDataMap.get(e.getEntity().getUniqueId());
         if (victimData == null) {
-            Bukkit.broadcastMessage("2");
             return;
         }
         if (victimData instanceof Hunter) {
-            Bukkit.broadcastMessage("3");
             e.setCancelled(true);
         } else if (victimData instanceof Human) {
-
-            Bukkit.broadcastMessage("4");
             player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, getAttackCooldownTicks(), 99));
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, getAttackCooldownTicks(), 4));
         }
