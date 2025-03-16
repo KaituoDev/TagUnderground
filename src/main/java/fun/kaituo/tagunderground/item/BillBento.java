@@ -5,15 +5,9 @@ import fun.kaituo.tagunderground.character.Bill;
 import fun.kaituo.tagunderground.util.ActiveItem;
 import fun.kaituo.tagunderground.util.PlayerData;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 @SuppressWarnings("unused")
-public class DirtyLiquid extends ActiveItem {
-    @Override
-    public Rarity getRarity() {
-        return Rarity.COMMON;
-    }
+public class BillBento extends ActiveItem {
     @Override
     public boolean use(Player p) {
         PlayerData data = TagUnderground.inst().idDataMap.get(p.getUniqueId());
@@ -22,9 +16,22 @@ public class DirtyLiquid extends ActiveItem {
             p.sendMessage("§c你不能使用这个道具！");
             return false;
         }
-        p.sendMessage("§a获得生命恢复和§c反胃效果！");
-        p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,  150, 1));
-        p.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA,  300, 0));
+        if (p.getHealth() == p.getMaxHealth()) {
+            p.sendMessage("§c你的血量已满，无需食用便当！");
+            return false;
+        }
+        p.setHealth(p.getMaxHealth());
+        p.sendMessage("§a你吃了比尔的便当，生命值已恢复！");
         return true;
+    }
+
+    @Override
+    public boolean canObtainDirectly() {
+        return false;
+    }
+
+    @Override
+    public Rarity getRarity() {
+        return Rarity.RARE;
     }
 }

@@ -1,6 +1,9 @@
 package fun.kaituo.tagunderground.item;
 
+import fun.kaituo.tagunderground.TagUnderground;
+import fun.kaituo.tagunderground.character.Bill;
 import fun.kaituo.tagunderground.util.ActiveItem;
+import fun.kaituo.tagunderground.util.PlayerData;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -14,6 +17,12 @@ public class HeartbeatWine extends ActiveItem {
 
     @Override
     public boolean use(Player p) {
+        PlayerData data = TagUnderground.inst().idDataMap.get(p.getUniqueId());
+        assert data != null;
+        if (data.getClass().equals(Bill.class)) {
+            p.sendMessage("§c你不能使用这个道具！");
+            return false;
+        }
         p.sendMessage("§c回复一半最大生命值，获得与回复量相同的发光时长！");
         if (p.getHealth() * 2 < p.getMaxHealth()) {
             p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, (int) (p.getMaxHealth() * 10), 0));

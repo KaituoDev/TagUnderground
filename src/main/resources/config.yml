@@ -34,3 +34,8 @@ characters:
     jump-amplifier: 1
     soup-cooldown: 1800
     invisibility-duration: 100
+  Leaf:
+    item-obtain-cooldown: 600
+  Bill:
+    cd: 2400
+    serpent-god-blood-obtain-cooldown: 3600
