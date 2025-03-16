@@ -135,8 +135,8 @@ public class HuntState implements GameState, Listener {
         }
         Bukkit.getPluginManager().registerEvents(this, game);
         enableItems();
-        enableChests();
         taskIds.add(Bukkit.getScheduler().runTaskLater(game, () -> {
+            enableChests();
             removePlatform();
             for (Player p : game.getPlayers()) {
                 p.sendTitle(START_MESSAGE, "", 10, 30, 20);
