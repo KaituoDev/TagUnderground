@@ -59,7 +59,9 @@ public class LootChest {
         }
         taskIds.clear();
         clear();
-        shulker.remove();
+        if (shulker != null && shulker.isValid()) {
+            shulker.remove();
+        }
     }
 
     private void updateColor() {
