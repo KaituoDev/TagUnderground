@@ -7,6 +7,7 @@ import fun.kaituo.tagunderground.util.PlayerData;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 @SuppressWarnings("unused")
@@ -19,8 +20,11 @@ public class Baphomet extends Hunter {
         super(p);
     }
 
-    @EventHandler
-    public void onDamage(EntityDamageByEntityEvent e) {
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onDamageHuman(EntityDamageByEntityEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
         if (!e.getDamager().equals(player)) {
             return;
         }
