@@ -323,6 +323,9 @@ public class HuntState implements GameState, Listener {
             }
         } else {
             corpses.add(new Corpse(data));
+            for (Player player : TagUnderground.inst().getPlayers()) {
+                player.sendMessage("§f" + p.getName() + " §c 重伤倒地！");
+            }
         }
         data.onDestroy();
         game.idDataMap.remove(p.getUniqueId());
